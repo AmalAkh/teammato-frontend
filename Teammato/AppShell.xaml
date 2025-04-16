@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="Teammato.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Teammato"
+    xmlns:pages="clr-namespace:Teammato.Pages"
+    
+    Title="Teammato">
+
+    <TabBar>
+        <Tab Title="Find">
+            <Tab.Icon>
+                <FontImageSource
+                    Glyph="&#xf11b;"  
+                    FontFamily="FontAwesomeSolid"
+                    Size="24"
+                    Color="Black" />
+            </Tab.Icon>
+            <ShellContent Title="Play" ContentTemplate="{DataTemplate pages:NewGameSessionPage}"/>
+        </Tab>
+        <Tab Title="Chats">
+            <Tab.Icon>
+                <FontImageSource
+                    Glyph="&#xf007;"  
+                    FontFamily="FontAwesomeSolid"
+                    Size="24"
+                    Color="Black" />
+            </Tab.Icon>
+            <ShellContent Title="Chats" ContentTemplate="{DataTemplate pages:ChatsPage}"/>
+        </Tab>
+        <Tab Title="Profile">
+            <Tab.Icon>
+                <FontImageSource
+                    Glyph="&#xf075;"  
+                    FontFamily="FontAwesomeSolid"
+                    Size="24"
+                    Color="Black" />
+            </Tab.Icon>
+            <ShellContent Title="Profile" ContentTemplate="{DataTemplate pages:ProfilePage}"/>
+        </Tab>
+        <Tab Title="Settings">
+            <Tab.Icon>
+                <FontImageSource
+                    Glyph="&#xf013;"  
+                    FontFamily="FontAwesomeSolid"
+                    Size="24"
+                    Color="Black" />
+            </Tab.Icon>
+            <ShellContent Title="Settings" ContentTemplate="{DataTemplate pages:SettingsPage}"/>
+        </Tab>
+    </TabBar>
+
+</Shell>
