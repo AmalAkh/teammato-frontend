@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Teammato.Pages.LoginPage">
+    <ContentPage.Content>
+        
+        <Grid>
+          
+            <StackLayout VerticalOptions="Center">
+                
+                <Entry Placeholder="E-mail or nickname" Margin="4"/>
+                <Entry Placeholder="Password" IsPassword="True" Margin="4"/>
+                
+                <Button Text="Sign In" Margin="4"/>
+                <Button Text="Sign Up" Margin="4"/>
+                
+            </StackLayout>
+               
+            
+        </Grid>
+        
+    </ContentPage.Content>
+</ContentPage>
