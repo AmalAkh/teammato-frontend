@@ -1,6 +1,7 @@
 ﻿using Microsoft.Maui.Platform;
 using Teammato.Controls;
 using Teammato.Pages;
+using Teammato.Services;
 
 namespace Teammato;
 
@@ -9,6 +10,7 @@ public partial class App : Application
     public App()
     {
         InitializeComponent();
+        RestAPIService.Init("http://147.175.160.66:8080/api/");
         Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping(nameof(IView.Background), (handler, view) =>
         {
             if (view is CustomEntry entry)
@@ -39,8 +41,11 @@ public partial class App : Application
         });
     }
 
-    protected override Window CreateWindow(IActivationState? activationState)
+    
+    
+    protected override  Window CreateWindow(IActivationState? activationState)
     {
         return new Window(new LoginPage());
+       
     }
 }

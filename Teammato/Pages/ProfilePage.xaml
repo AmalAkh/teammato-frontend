@@ -2,8 +2,14 @@
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Teammato.Pages.ProfilePage">
+             x:Class="Teammato.Pages.ProfilePage"
+             xmlns:viewModels="clr-namespace:Teammato.ViewModels">
+    <ContentPage.BindingContext>
+        <viewModels:ProfileViewModel />
+    </ContentPage.BindingContext>
     <ContentPage.Content>
-        
+        <StackLayout>
+            <Button Text="Log out" Command="{Binding LogOutCommand}"/>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>
