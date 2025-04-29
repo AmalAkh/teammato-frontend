@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Teammato.Abstractions;
 
 namespace Teammato.Services;
 using System.Net.Http;
@@ -58,6 +59,25 @@ public class RestAPIService
             throw new FailedAccessTokenRequestException();
         }
       
+    }
+
+    public static async Task<List<Chat>> GetChats()
+    {
+        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "chats/list");
+        request.Headers.Add("Authorization", "Bearer " + _accessToken);
+        var response = await _client.SendAsync(request);
+        if (response.IsSuccessStatusCode)
+        {
+            return JsonSerializer.Deserialize<List<Chat>>(await response.Content.ReadAsStringAsync());
+            
+        }
+        else if(response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            await UpdateAccessToken();
+            return await GetChats();
+        }
+
+        throw new Exception();
     }
 
     public static async Task LogOut()

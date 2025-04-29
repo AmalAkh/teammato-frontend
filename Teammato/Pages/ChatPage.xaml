@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Teammato.Pages.ChatPage"
+             xmlns:controls="clr-namespace:Teammato.Controls"
+             Shell.TabBarIsVisible="False"
+             >
+    <Shell.TitleView>
+        <Grid Padding="4">
+            <Grid.ColumnDefinitions>
+                
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Frame Margin="0,0,0,0" CornerRadius="50" IsClippedToBounds="True" WidthRequest="50"  Grid.Column="0" HeightRequest="50">
+                <Image WidthRequest="50"  Grid.Column="0" HeightRequest="50" BackgroundColor="Gray"/>
+            </Frame>
+            <Label Margin="10,0,0,0" Text="Text chat" VerticalTextAlignment="Center" Grid.Column="1"/>
+        </Grid>
+    </Shell.TitleView>
+        <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                
+            </Grid.RowDefinitions>
+            <CollectionView Grid.Row="0" BackgroundColor="Gray">
+                
+            </CollectionView>
+            <Grid Grid.Row="1" Padding="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                    <controls:CustomEntry Grid.Column="0" />
+                    <ImageButton Grid.Column="1" Padding="10" >
+                        <ImageButton.Source>
+                            <FontImageSource Color="Black" Size="12" FontFamily="FontAwesomeSolid" Glyph="&#xf1d8;"/>
+                        </ImageButton.Source>
+                    </ImageButton>
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
