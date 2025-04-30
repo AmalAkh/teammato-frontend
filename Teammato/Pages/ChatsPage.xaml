@@ -3,10 +3,16 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Teammato.Pages.ChatsPage"
+             xmlns:utils="clr-namespace:Teammato.Utils"
              xmlns:viewModels="clr-namespace:Teammato.ViewModels">
     <ContentPage.BindingContext>
         <viewModels:ChatsViewModel/>
     </ContentPage.BindingContext>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <utils:IGDBUrlImageConverter x:Key="ChatUrlImageConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
         <ContentPage.Content>
         <CollectionView ItemsSource="{Binding Chats}" SelectedItem="{Binding SelectedChat, Mode=TwoWay}" SelectionChangedCommand="{Binding SelectChatCommand}" SelectionMode="Single">
             <CollectionView.ItemTemplate>
@@ -20,7 +26,7 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Frame Margin="20,0,0,0" CornerRadius="50" IsClippedToBounds="True" WidthRequest="50"  Grid.Column="0" HeightRequest="50">
-                            <Image WidthRequest="50"  Grid.Column="0" HeightRequest="50" BackgroundColor="Gray"/>
+                            <Image WidthRequest="50" Source="{Binding Image, Converter={StaticResource ChatUrlImageConverter}}"  Grid.Column="0" HeightRequest="50" BackgroundColor="Gray"/>
                         </Frame>
                         <Label FontAttributes="Bold" Margin="10,0,0,0"  Grid.Column="1" Text="{Binding Name}"/>
                     </Grid>

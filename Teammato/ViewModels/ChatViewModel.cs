@@ -30,7 +30,7 @@ public class ChatViewModel : BaseViewModel
         }
     }
     
-    [JsonPropertyName("id")]
+    
     public string? Id
     {
         get => _chat.Id;
@@ -40,6 +40,18 @@ public class ChatViewModel : BaseViewModel
             {
                 _chat.Id = value;
                 OnPropertyChanged("Id");
+            }
+        }
+    }
+    public string? Image
+    {
+        get => _chat.Image;
+        set
+        {
+            if (_chat.Image != value)
+            {
+                _chat.Image = value;
+                OnPropertyChanged("Image");
             }
         }
     }
