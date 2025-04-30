@@ -10,11 +10,13 @@ public class Chat
     [JsonPropertyName("id")]
     // The unique identifier for the chat.
     public string ?Id{get;set;}
+    
+  
         
     // A list of participants in the chat.
     [JsonPropertyName("participants")]
     public List<User> Participants{get;set;}
-
+    public List<Message> Messages{get;set;}
     // A list of messages associated with the chat.
     
         
