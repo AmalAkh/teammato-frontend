@@ -3,7 +3,52 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Teammato.Pages.SettingsPage">
+    
+    <Shell.TitleView>
+        <Grid>
+            <Label Text="Settings"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   FontSize="20"
+                   FontAttributes="Bold" />
+        </Grid>
+    </Shell.TitleView>
+    
     <ContentPage.Content>
-        
+        <ScrollView>
+            <VerticalStackLayout Padding="16,0" 
+                                 Spacing="5">
+                <!-- Notifications switch -->
+                <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Send me notifications"
+                               VerticalOptions="Center"
+                               FontSize="16"
+                               FontAttributes="Bold"/>
+                        <Switch x:Name="NotificationSwitch"
+                                HorizontalOptions="EndAndExpand"
+                                IsToggled="True"/>
+                    </Grid>
+                <!-- Dark theme switch -->
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Use dark theme"
+                               VerticalOptions="Center"
+                               FontSize="16"
+                               FontAttributes="Bold"/>
+                        <Switch x:Name="ThemeSwitch"
+                                HorizontalOptions="EndAndExpand"
+                                IsToggled="True"/>
+                    </Grid>
+                <!-- Geoposition switch -->
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Use my geolocation"
+                               VerticalOptions="Center"
+                               FontSize="16"
+                               FontAttributes="Bold"/>
+                        <Switch x:Name="GeopositionSwitch"
+                                HorizontalOptions="EndAndExpand"
+                                IsToggled="True"/>
+                    </Grid>
+            </VerticalStackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>
