@@ -2,14 +2,70 @@
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:Teammato.Controls"
              x:Class="Teammato.Pages.ProfilePage"
              xmlns:viewModels="clr-namespace:Teammato.ViewModels">
+    
+    <Shell.TitleView>
+        <Grid>
+            <Label Text="Profile"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   FontSize="20"
+                   FontAttributes="Bold" />
+        </Grid>
+    </Shell.TitleView>
+    
     <ContentPage.BindingContext>
         <viewModels:ProfileViewModel />
     </ContentPage.BindingContext>
+    
     <ContentPage.Content>
-        <StackLayout>
-            <Button Text="Log out" Command="{Binding LogOutCommand}"/>
-        </StackLayout>
+        <ScrollView>
+            <VerticalStackLayout Padding="16,0" 
+                                 Spacing="5">
+                <!-- Profile image -->
+                <Frame BackgroundColor="Transparent"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center"
+                       HeightRequest="300"
+                       WidthRequest="300"
+                       Margin="20"
+                       BorderColor="Gray"
+                       CornerRadius="150"
+                       Padding="0">
+                    <ImageButton x:Name="ProfileImage"
+                                 Aspect="AspectFill"
+                                 Clicked="OnProfileImageClicked"/>
+                </Frame>
+                <!-- Profile name and description -->
+                <Label Text="Nickname"
+                       FontAttributes="Bold"
+                       FontSize="16"/>
+                <controls:CustomEntry Text="{Binding Nickname, Mode=TwoWay}"  
+                                      Margin="4"/>
+                
+                <Label Text="Description"
+                       FontAttributes="Bold"
+                       FontSize="16"/>
+                <controls:CustomEditor Text="{Binding Description, Mode=TwoWay}"
+                                       AutoSize="TextChanges"
+                                       Margin="4"/>
+                
+                <!-- Apply changes button -->
+                <Button Text="Apply Changes" 
+                        Command="{Binding ApplyChangesCommand}"
+                        IsEnabled="{Binding IsModified}"/>
+                <!-- Preferred languages -->
+                
+                <!-- Favorite games -->
+                
+                <!-- Remove account and Logout buttons -->
+                <Button Text="Remove account" 
+                        Command="{Binding RemoveAccountCommand}"/>
+                <Button Text="Logout" 
+                        Command="{Binding LogOutCommand}"/>
+            </VerticalStackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>
