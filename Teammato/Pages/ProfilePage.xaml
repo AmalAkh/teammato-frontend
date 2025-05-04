@@ -36,21 +36,26 @@
                        Padding="0">
                     <ImageButton x:Name="ProfileImage"
                                  Aspect="AspectFill"
-                                 Clicked="OnProfileImageClicked"/>
+                                 Command="{Binding PickProfileImageCommand}"/>
                 </Frame>
                 <!-- Profile name and description -->
                 <Label Text="Nickname"
                        FontAttributes="Bold"
                        FontSize="16"/>
-                <controls:CustomEntry Text="{Binding Nickname, Mode=TwoWay}"  
-                                      Margin="4"/>
+                <!-- <controls:CustomEntry Text="{Binding Nickname, Mode=TwoWay}"   -->
+                <!--                       Margin="4"/> -->
+                <Entry Text="{Binding Nickname, Mode=TwoWay}"
+                       Margin="4"/>
                 
                 <Label Text="Description"
                        FontAttributes="Bold"
                        FontSize="16"/>
-                <controls:CustomEditor Text="{Binding Description, Mode=TwoWay}"
-                                       AutoSize="TextChanges"
-                                       Margin="4"/>
+                <Editor Text="{Binding Description, Mode=TwoWay}"
+                        AutoSize="TextChanges"
+                        Margin="4"/>
+                <!-- <controls:CustomEditor Text="{Binding Description, Mode=TwoWay}" -->
+                <!--                        AutoSize="TextChanges" -->
+                <!--                        Margin="4"/> -->
                 
                 <!-- Apply changes button -->
                 <Button Text="Apply Changes" 

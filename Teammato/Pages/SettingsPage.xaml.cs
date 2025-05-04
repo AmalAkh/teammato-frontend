@@ -12,7 +12,6 @@ public partial class SettingsPage : ContentPage
     public SettingsPage()
     {
         InitializeComponent();
-        BindingContext = new SettingsViewModel();
     }
     
     protected override async void OnAppearing()

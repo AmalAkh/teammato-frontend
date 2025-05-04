@@ -2,7 +2,8 @@
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Teammato.Pages.SettingsPage">
+             x:Class="Teammato.Pages.SettingsPage"
+             xmlns:viewModels="clr-namespace:Teammato.ViewModels">
     
     <Shell.TitleView>
         <Grid>
@@ -13,6 +14,10 @@
                    FontAttributes="Bold" />
         </Grid>
     </Shell.TitleView>
+    
+    <ContentPage.BindingContext>
+        <viewModels:SettingsViewModel/>
+    </ContentPage.BindingContext>
     
     <ContentPage.Content>
         <ScrollView>
