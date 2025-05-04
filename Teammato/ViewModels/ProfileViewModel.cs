@@ -17,6 +17,8 @@ public class ProfileViewModel : BaseViewModel
     
     private string _nickname;
     private string _description;
+    private string _imageUrl;
+    
     private bool _isModified;
     public string Nickname
     {

@@ -26,7 +26,7 @@
                                FontAttributes="Bold"/>
                         <Switch x:Name="NotificationSwitch"
                                 HorizontalOptions="EndAndExpand"
-                                IsToggled="True"/>
+                                IsToggled="{Binding Enabled, Mode=TwoWay}"/>
                     </Grid>
                 <!-- Dark theme switch -->
                     <Grid ColumnDefinitions="*,Auto">
@@ -36,7 +36,7 @@
                                FontAttributes="Bold"/>
                         <Switch x:Name="ThemeSwitch"
                                 HorizontalOptions="EndAndExpand"
-                                IsToggled="True"/>
+                                IsToggled="{Binding DarkTheme, Mode=TwoWay}"/>
                     </Grid>
                 <!-- Geoposition switch -->
                     <Grid ColumnDefinitions="*,Auto">
@@ -46,7 +46,7 @@
                                FontAttributes="Bold"/>
                         <Switch x:Name="GeopositionSwitch"
                                 HorizontalOptions="EndAndExpand"
-                                IsToggled="True"/>
+                                IsToggled="{Binding Geoposition, Mode=TwoWay}"/>
                     </Grid>
             </VerticalStackLayout>
         </ScrollView>
