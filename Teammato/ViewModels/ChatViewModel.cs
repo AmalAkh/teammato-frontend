@@ -69,18 +69,24 @@ public class ChatViewModel : BaseViewModel
         }
     }
     public ObservableCollection<Message> Messages { get;private set;  }
-
+    public ObservableCollection<User> Participants { get;private set;  }
+    private ChatsViewModel _chatsViewModel;
 
     public ICommand SelectChatCommand { get; private set; }
     public ICommand AddMessageCommand { get; private set; }
-    public ChatViewModel(Chat chat)
+    public ChatViewModel(ChatsViewModel chatsViewModel,Chat chat)
     {
         this._chat = chat;
+        this._chatsViewModel = chatsViewModel;
+        Participants = new ObservableCollection<User>(chat.Participants);
         Messages = new ObservableCollection<Message>();
+        
         
         SelectChatCommand = new Command(async() =>
         {
+            _chatsViewModel.SelectedChat = this;
             await Shell.Current.Navigation.PushAsync(new ChatPage(this));
+            
         });
         AddMessageCommand = new Command(AddMessage);
 
@@ -106,7 +112,7 @@ public class ChatViewModel : BaseViewModel
     public async void AddMessage()
     {
         
-        Messages.Add(new Message (MessageText, StorageService.CurrentUser));
+        //Messages.Add(new Message (MessageText, StorageService.CurrentUser));
         await RestAPIService.SendMessage(MessageText, Id);
         MessageText = "";
     }

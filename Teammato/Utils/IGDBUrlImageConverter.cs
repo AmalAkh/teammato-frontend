@@ -5,15 +5,7 @@ namespace Teammato.Utils;
 
 public class IGDBUrlImageConverter:IValueConverter
 {
-
-
-
-
-
-
     
-  
-
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
         if (value is string filename && !string.IsNullOrWhiteSpace(filename))

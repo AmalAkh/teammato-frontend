@@ -16,12 +16,14 @@ public partial class LoginPage : ContentPage
 
     protected override async void OnAppearing()
     {
-        
-        await RestAPIService.CheckAuthorization();
         base.OnAppearing();
+        await RestAPIService.CheckAuthorization();
+        
         if (RestAPIService.IsLoggedIn)
         {
             App.Current.MainPage = new AppShell();
+            
         }
+        
     }
 }

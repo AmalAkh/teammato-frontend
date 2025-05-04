@@ -26,7 +26,7 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Frame Margin="20,0,0,0" CornerRadius="50" IsClippedToBounds="True" WidthRequest="50"  Grid.Column="0" HeightRequest="50">
-                            <Image WidthRequest="50" Source="{Binding Image, Converter={StaticResource ChatUrlImageConverter}}"  Grid.Column="0" HeightRequest="50" BackgroundColor="Gray"/>
+                            <Image WidthRequest="50" Source="{Binding Image}"  Grid.Column="0" HeightRequest="50" BackgroundColor="Gray"/>
                         </Frame>
                         <Label FontAttributes="Bold" Margin="10,0,0,0"  Grid.Column="1" Text="{Binding Name}"/>
                     </Grid>

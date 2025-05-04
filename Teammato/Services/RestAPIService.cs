@@ -9,6 +9,10 @@ public class RestAPIService
     private static string _refreshToken;
     private static string _accessToken;
 
+    internal static string GetAccessToken()
+    {
+        return _accessToken;
+    }
     public static bool IsLoggedIn
     {
         get;
@@ -164,6 +168,7 @@ public class RestAPIService
 
         throw new Exception();
     }
+    
     public static async Task CheckAuthorization()
     {
         _refreshToken = await SecureStorage.GetAsync("refresh_token");
@@ -171,12 +176,15 @@ public class RestAPIService
         if (_refreshToken == null)
         {
             IsLoggedIn = false;
+            
             return;
         }
-
         await UpdateAccessToken();
-        
+        await WebSocketService.ConnectAsync(new Uri(new Uri(BaseAddress.Replace("http", "ws")),"ws"));
         StorageService.CurrentUser = await GetUser();
+       
+
+        
 
     }
     
