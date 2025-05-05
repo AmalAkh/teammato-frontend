@@ -2,8 +2,49 @@
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Teammato.Pages.ChatsPage">
-    <ContentPage.Content>
-        
+             x:Class="Teammato.Pages.ChatsPage"
+             xmlns:utils="clr-namespace:Teammato.Utils"
+             xmlns:viewModels="clr-namespace:Teammato.ViewModels">
+    <ContentPage.BindingContext>
+        <viewModels:ChatsViewModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <utils:IGDBUrlImageConverter x:Key="ChatUrlImageConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+        <ContentPage.Content>
+        <CollectionView ItemsSource="{Binding Chats}" SelectedItem="{Binding SelectedChat, Mode=TwoWay}" SelectionChangedCommand="{Binding SelectChatCommand}" SelectionMode="Single">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="4,5,5,5">
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding SelectChatCommand}"/>
+                        </Grid.GestureRecognizers>
+                            <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Frame Margin="20,0,0,0" CornerRadius="50" IsClippedToBounds="True" WidthRequest="50"  Grid.Column="0" HeightRequest="50">
+                            <Image WidthRequest="50" Source="{Binding Image}"  Grid.Column="0" HeightRequest="50" BackgroundColor="Gray"/>
+                        </Frame>
+                        <StackLayout Grid.Column="1">
+                            <Label  MaxLines="1" FontAttributes="Bold" Margin="10,0,0,6"   Text="{Binding Name}"/>
+                            <Border Padding="2" Margin="10,0,0,0" Style="{DynamicResource LastMessageFrame}">
+                                <Label MaxLines="1"  Margin="10,0,0,0">
+                                    <Label.Text>
+                                        <MultiBinding StringFormat="{}{1}: {0}">
+                                            <Binding Path="LastMessage.Content" />
+                                            <Binding Path="LastMessage.Sender.NickName" />
+                                        </MultiBinding>
+                                    </Label.Text>
+                                </Label>
+                            </Border>
+                        </StackLayout>
+                    </Grid>
+                            
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
     </ContentPage.Content>
 </ContentPage>

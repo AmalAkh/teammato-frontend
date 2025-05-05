@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Teammato.Pages.ChatPage"
+             xmlns:controls="clr-namespace:Teammato.Controls"
+             xmlns:utils="clr-namespace:Teammato.Utils"
+             Shell.TabBarIsVisible="False"
+             >
+        <Shell.BackButtonBehavior>
+            <BackButtonBehavior Command="{Binding GoBackCommand }"/>
+        </Shell.BackButtonBehavior>
+        <Shell.TitleView>
+        <Grid Padding="4">
+            <Grid.ColumnDefinitions>
+                
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Frame Margin="0,0,0,0" CornerRadius="50" IsClippedToBounds="True" WidthRequest="50"  Grid.Column="0" HeightRequest="50">
+                <Image WidthRequest="50"  Grid.Column="0" HeightRequest="50" BackgroundColor="Gray" Source="{Binding Image}"/>
+            </Frame>
+            <Label FontAttributes="Bold" Margin="10,0,0,0" Text="{Binding Name}" VerticalTextAlignment="Center" Grid.Column="1"/>
+        </Grid>
+    </Shell.TitleView>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <utils:UrlImageConverter x:Key="ImageUrlConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+        <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                
+            </Grid.RowDefinitions>
+            <CollectionView x:Name="MessageCollectionView" ItemsUpdatingScrollMode="KeepLastItemInView" ItemsSource="{Binding Messages}" Grid.Row="0" >
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        
+                            
+                        <StackLayout>
+                            <Grid Padding="6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackLayout Grid.Column="1" Padding="2">
+                                    <Label Margin="2" FontAttributes="Bold" Text="{Binding Sender.NickName}"/>
+                                    <Label Text="{Binding Content}" FontSize="16"/>
+                                    <Label Text="{Binding CreatedAt}" FontSize="8" Margin="0,4,0,0"/>
+                                    
+                                </StackLayout>
+                                
+                                <Frame Grid.Column="0" Padding="0" CornerRadius="60" IsClippedToBounds="True" HeightRequest="40" WidthRequest="40">
+                                    <Image BackgroundColor="Red" Grid.Column="0" HeightRequest="40" WidthRequest="40" Source="{Binding Sender.Image, Converter={StaticResource ImageUrlConverter}}"/>
+                                </Frame>
+                                
+                            </Grid>
+                        </StackLayout>
+                        
+                            
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            
+            <!--<controls:MessageView  Messages="{Binding Messages, Mode=TwoWay}"/>-->
+            <Grid Grid.Row="1" Padding="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                    <controls:CustomEntry Grid.Column="0" Placeholder="Message..."  Text="{Binding MessageText}" 
+                                          Focused="MessageTextEntry_OnFocused"/>
+                    <ImageButton Grid.Column="1" Padding="10"  Command="{Binding AddMessageCommand}">
+                        <ImageButton.Source>
+                            <FontImageSource Color="Black" Size="12" FontFamily="FontAwesomeSolid" Glyph="&#xf1d8;"/>
+                        </ImageButton.Source>
+                    </ImageButton>
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

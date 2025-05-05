@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.Json;
+using Teammato.Abstractions;
 
 namespace Teammato.Services;
 using System.Net.Http;
@@ -10,14 +11,43 @@ public class RestAPIService
     private static string _refreshToken;
     private static string _accessToken;
 
+    internal static string GetAccessToken()
+    {
+        return _accessToken;
+    }
     public static bool IsLoggedIn
     {
         get;
         private set;
     } = true;
+    
+    public static async Task SendMessage(string text, string chatId)
+    {
+        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"api/messages/{chatId}/new");
+        request.Headers.Add("Authorization", "Bearer " + _accessToken);
+        Dictionary<string, string> data = new Dictionary<string, string>();
+
+        data.Add("Content", text);
+        
+
+        var content = new StringContent(JsonSerializer.Serialize(data), null, "text/json");
+        request.Content = content;
+        var response = await _client.SendAsync(request);
+        if (response.IsSuccessStatusCode)
+        {
+            
+            
+        }
+        else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized);
+        {
+            UpdateAccessToken();
+        }
+      
+    }
     public static async Task<bool> SignIn(string login, string password)
     {
-        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "users/signin");
+        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "api/users/signin");
+        
         Dictionary<string, string> data = new Dictionary<string, string>();
 
         data.Add("login", login);
@@ -44,7 +74,7 @@ public class RestAPIService
 
     public static async Task UpdateAccessToken()
     {
-        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "users/access-token");
+        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "api/users/access-token");
         
         request.Headers.Add("Authorization", "Bearer " + _refreshToken);
 
@@ -62,29 +92,89 @@ public class RestAPIService
       
     }
 
+    public static async Task<List<Chat>> GetChats()
+    {
+        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "api/chats/list");
+        request.Headers.Add("Authorization", "Bearer " + _accessToken);
+        var response = await _client.SendAsync(request);
+        if (response.IsSuccessStatusCode)
+        {
+            return JsonSerializer.Deserialize<List<Chat>>(await response.Content.ReadAsStringAsync());
+            
+        }
+        else if(response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            await UpdateAccessToken();
+            return await GetChats();
+        }
+
+        throw new Exception();
+    }
+    public static async Task<List<Message>> GetMessages(string chatId)
+    {
+        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"api/messages/{chatId}/messages");
+        request.Headers.Add("Authorization", "Bearer " + _accessToken);
+        var response = await _client.SendAsync(request);
+        if (response.IsSuccessStatusCode)
+        {
+            return JsonSerializer.Deserialize<List<Message>>(await response.Content.ReadAsStringAsync());
+            
+        }
+        else if(response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            await UpdateAccessToken();
+            return await GetMessages(chatId);
+        }
+
+        throw new Exception();
+    }
+
     public static async Task LogOut()
     { 
         SecureStorage.Remove("refresh_token");
         IsLoggedIn = false;
     }
 
-    public static void Init(string baseUrl)
+    public static string BaseAddress
+    {
+        get
+        {
+            return _client.BaseAddress.ToString();
+        }
+        set
+        {
+            _client.BaseAddress = new Uri(value);
+        }
+    }
+    
+    public static  void Init(string baseUrl)
+
     {
         _client.BaseAddress = new Uri(baseUrl);
     }
 
-    public static async Task CheckAuthorization()
+    public static async Task<User> GetUser()
     {
-        _refreshToken = await SecureStorage.GetAsync("refresh_token");
-
-        if (_refreshToken == null)
+        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "api/users/info");
+        request.Headers.Add("Authorization", "Bearer " + _accessToken);
+        var response = await _client.SendAsync(request);
+        if (response.IsSuccessStatusCode)
         {
-            IsLoggedIn = false;
-            return;
+            return JsonSerializer.Deserialize<User>(await response.Content.ReadAsStringAsync());
+            
+        }
+        else if(response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            await UpdateAccessToken();
+            return await GetUser();
         }
 
-        await UpdateAccessToken();
+        throw new Exception();
     }
+    
+    
+
+    
     
     public static async Task<bool> UploadProfileImage(Stream imageStream, string fileName)
     {
@@ -169,11 +259,30 @@ public class RestAPIService
         return null;
     }
 
-    public static async Task<bool> RemoveLanguage(string ISOName)
+   
+       
+
+        
+
+   public static async Task<bool> RemoveLanguage(string ISOName)
     {
         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, $"languages/{ISOName}");
         request.Headers.Add("Authorization", "Bearer " + _accessToken);
 
+        await WebSocketService.ConnectAsync(new Uri(new Uri(BaseAddress.Replace("http", "ws")),"ws"));
+        StorageService.CurrentUser = await GetUser();
+    }
+    public static async Task CheckAuthorization()
+    {
+        _refreshToken = await SecureStorage.GetAsync("refresh_token");
+
+        if (_refreshToken == null)
+        {
+            IsLoggedIn = false;
+            
+            return;
+        }
+        await UpdateAccessToken();
         var response = await _client.SendAsync(request);
         return response.IsSuccessStatusCode;
     }
