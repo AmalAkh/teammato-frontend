@@ -1,5 +1,7 @@
+using System.Collections.ObjectModel;
 using System.Text.Json;
 using System.Windows.Input;
+using System.Globalization;
 using Microsoft.Maui.Controls;
 using Teammato.Models;
 using Teammato.Pages;
@@ -14,10 +16,15 @@ public class ProfileViewModel : BaseViewModel
     public ICommand ApplyChangesCommand { get; private set; }
     public ICommand PickProfileImageCommand { get; private set; }
     
+    public ICommand AddLanguageCommand { get; }
+    public ICommand RemoveLanguageCommand { get; }
+    
     private const string PROFILE_KEY = "user_profile";
     
     private UserProfile _userProfile = new UserProfile();
     private UserProfile _originalUserProfile = new UserProfile();
+    
+    public ObservableCollection<Language> PreferredLanguages { get; set; } = new();
     
     private bool _isModified;
     public bool IsModified
@@ -61,6 +68,9 @@ public class ProfileViewModel : BaseViewModel
         RemoveAccountCommand = new Command(async () => RemoveAccount());
         
         ApplyChangesCommand = new Command(async () => ApplyChanges());
+        
+        AddLanguageCommand = new Command(async () => await AddLanguage());
+        RemoveLanguageCommand = new Command<string>(RemoveLanguage);
     }
 
     private async Task LogOut()
@@ -143,6 +153,29 @@ public class ProfileViewModel : BaseViewModel
         }
     }
     
+    public async Task LoadLanguages()
+    {
+        var languages = await RestAPIService.GetLanguages();
+        if (languages != null)
+        {
+            PreferredLanguages.Clear();
+            foreach (var language in languages)
+            {
+                try
+                {
+                    var culture = new CultureInfo(language.ISOName);
+                    language.Name = culture.EnglishName;
+                    
+                }
+                catch (CultureNotFoundException)
+                {
+                    language.Name = language.ISOName;
+                }
+                PreferredLanguages.Add(language);
+            }
+        }
+    }
+    
     public async Task LoadProfile()
     {
         try
@@ -188,11 +221,70 @@ public class ProfileViewModel : BaseViewModel
         {
             
         }
+        
+        await LoadLanguages();
     }
     
     private void CheckIfModified()
     {
         IsModified = _userProfile.Nickname != _originalUserProfile.Nickname ||
                      _userProfile.Description != _originalUserProfile.Description;
+    }
+    
+    public List<string> GetAllLanguages()
+    {
+        List<string> languages = new List<string>();
+        
+        foreach (CultureInfo culture in CultureInfo.GetCultures(CultureTypes.NeutralCultures))
+        {
+            languages.Add(culture.EnglishName);
+        }
+
+        return languages;
+    }
+    
+    private async Task AddLanguage()
+    {
+        var allLanguages = GetAllLanguages();
+        
+        var selectedLanguage = await Application.Current.MainPage.DisplayActionSheet(
+            "Select Language", "Cancel", null, allLanguages.ToArray());
+        
+        if (!string.IsNullOrEmpty(selectedLanguage) && !PreferredLanguages.Any(l => l.Name == selectedLanguage))
+        {
+            var newLanguage = new Language
+            {
+                Name = selectedLanguage,
+                ISOName = selectedLanguage.ToLower()
+            };
+            
+            var success = await RestAPIService.AddLanguage(newLanguage.ISOName);
+        
+            if (success)
+            {
+                PreferredLanguages.Add(newLanguage);
+            }
+            else
+            {
+                await App.Current.MainPage.DisplayAlert("Error", "Failed to add language", "OK");
+            }
+        }
+    }
+    
+    private async void RemoveLanguage(string ISOName)
+    {
+        var languageToRemove = PreferredLanguages.FirstOrDefault(l => l.ISOName == ISOName);
+        if (languageToRemove != null)
+        {
+            var success = await RestAPIService.RemoveLanguage(ISOName);
+            if (success)
+            {
+                PreferredLanguages.Remove(languageToRemove);
+            }
+            else
+            {
+                await App.Current.MainPage.DisplayAlert("Error", "Failed to remove language", "OK");
+            }
+        }
     }
 }

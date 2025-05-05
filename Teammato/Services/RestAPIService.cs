@@ -148,4 +148,50 @@ public class RestAPIService
             return false;
         }
     }
+
+    public static async Task<List<Language>> GetLanguages()
+    {
+        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "languages/list");
+        request.Headers.Add("Authorization", "Bearer " + _accessToken);
+        
+        var response = await _client.SendAsync(request);
+        if (response.IsSuccessStatusCode)
+        {
+            var content = await response.Content.ReadAsStreamAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            var languages = JsonSerializer.Deserialize<List<Language>>(content, options);
+            return languages;
+        }
+        
+        return null;
+    }
+
+    public static async Task<bool> RemoveLanguage(string ISOName)
+    {
+        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, $"languages/{ISOName}");
+        request.Headers.Add("Authorization", "Bearer " + _accessToken);
+
+        var response = await _client.SendAsync(request);
+        return response.IsSuccessStatusCode;
+    }
+    
+    public static async Task<bool> AddLanguage(string ISOName)
+    {
+        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"languages/new");
+        request.Headers.Add("Authorization", "Bearer " + _accessToken);
+
+        var data = new Dictionary<string, string>
+        {
+            { "isoname", ISOName }
+        };
+            
+        var content = new StringContent(JsonSerializer.Serialize(data), null, "text/json");
+        request.Content = content;
+        
+        var response = await _client.SendAsync(request);
+        return response.IsSuccessStatusCode;
+    }
 }

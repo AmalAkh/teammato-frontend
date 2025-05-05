@@ -62,9 +62,36 @@
                         Command="{Binding ApplyChangesCommand}"
                         IsEnabled="{Binding IsModified}"/>
                 <!-- Preferred languages -->
-                <Label Text="Languages"
-                       FontAttributes="Bold"
-                       FontSize="16"/>
+                <Grid ColumnDefinitions="*,Auto">
+                    <Label Text="Languages"
+                           FontAttributes="Bold"
+                           FontSize="16"
+                           VerticalOptions="Center"/>
+                    <Button Text="+" 
+                            Command="{Binding AddLanguageCommand}"
+                            HeightRequest="10"
+                            WidthRequest="10"
+                            Grid.Column="1"
+                            HorizontalOptions="End"
+                            BackgroundColor="LightGray"
+                            TextColor="Black"
+                            CornerRadius="30"/>
+                </Grid>
+                <CollectionView ItemsSource="{Binding  PreferredLanguages}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ColumnDefinitions="*, Auto">
+                                <Label Text="{Binding Name}" VerticalOptions="Center"/>
+                                <Button Text="Remove"
+                                        Command="{Binding BindingContext.RemoveLanguageCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                        CommandParameter="{Binding ISOName}"
+                                        Grid.Column="1"
+                                        BackgroundColor="Transparent"
+                                        TextColor="Purple"/>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
                 <!-- Favorite games -->
                 <Label Text="Favorite games"
                        FontAttributes="Bold"
