@@ -11,7 +11,8 @@ public class Chat
     // The unique identifier for the chat.
     public string ?Id{get;set;}
     
-  
+    [JsonPropertyName("lastMessage")]
+    public Message? LastMessage{get;set;}
         
     // A list of participants in the chat.
     [JsonPropertyName("participants")]

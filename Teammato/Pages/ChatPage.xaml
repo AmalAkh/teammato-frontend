@@ -7,7 +7,9 @@
              xmlns:utils="clr-namespace:Teammato.Utils"
              Shell.TabBarIsVisible="False"
              >
-   
+        <Shell.BackButtonBehavior>
+            <BackButtonBehavior Command="{Binding GoBackCommand }"/>
+        </Shell.BackButtonBehavior>
         <Shell.TitleView>
         <Grid Padding="4">
             <Grid.ColumnDefinitions>

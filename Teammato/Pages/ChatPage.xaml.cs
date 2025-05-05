@@ -20,6 +20,8 @@ public partial class ChatPage : ContentPage
         {
             titleView.BindingContext = viewModel;
         }
+
+       
         
     
         LoadData();
@@ -28,7 +30,7 @@ public partial class ChatPage : ContentPage
     public async void LoadData()
     {
         
-    
+        
         await (this.BindingContext as ChatViewModel).LoadMessages();
         ScrollToEnd();
     }

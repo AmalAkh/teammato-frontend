@@ -28,7 +28,19 @@
                         <Frame Margin="20,0,0,0" CornerRadius="50" IsClippedToBounds="True" WidthRequest="50"  Grid.Column="0" HeightRequest="50">
                             <Image WidthRequest="50" Source="{Binding Image}"  Grid.Column="0" HeightRequest="50" BackgroundColor="Gray"/>
                         </Frame>
-                        <Label FontAttributes="Bold" Margin="10,0,0,0"  Grid.Column="1" Text="{Binding Name}"/>
+                        <StackLayout Grid.Column="1">
+                            <Label  MaxLines="1" FontAttributes="Bold" Margin="10,0,0,6"   Text="{Binding Name}"/>
+                            <Border Padding="2" Margin="10,0,0,0" Style="{DynamicResource LastMessageFrame}">
+                                <Label MaxLines="1"  Margin="10,0,0,0">
+                                    <Label.Text>
+                                        <MultiBinding StringFormat="{}{1}: {0}">
+                                            <Binding Path="LastMessage.Content" />
+                                            <Binding Path="LastMessage.Sender.NickName" />
+                                        </MultiBinding>
+                                    </Label.Text>
+                                </Label>
+                            </Border>
+                        </StackLayout>
                     </Grid>
                             
                 </DataTemplate>

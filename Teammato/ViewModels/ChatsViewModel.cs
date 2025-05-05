@@ -32,7 +32,7 @@ public class ChatsViewModel : BaseViewModel
                     if (SelectedChat.Id == newMessage.ChatId)
                     {
                         newMessage.Sender = SelectedChat.Participants.FirstOrDefault(p => p.Id == newMessage.UserId);
-                        SelectedChat.Messages.Add(newMessage);
+                        SelectedChat.AddMessage(newMessage);
                         return;
                     }
                     foreach (var chat in Chats)
@@ -49,15 +49,29 @@ public class ChatsViewModel : BaseViewModel
                 });
             }
         });
+        
     }
 
+    public void SortChats()
+    {
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            Chats = new ObservableCollection<ChatViewModel>(Chats.OrderByDescending((chat) => chat.LastMessage.CreatedAt).ToList());
+        });
+    }
     public async Task LoadChats()
     {
         var chats = await RestAPIService.GetChats();
+        chats = chats.OrderByDescending((chat) => chat.LastMessage.CreatedAt).ToList();
         MainThread.BeginInvokeOnMainThread(() =>
         {
             foreach (var chat in chats)
             {
+                if (chat.LastMessage != null)
+                {
+                    chat.LastMessage.Sender = chat.Participants.FirstOrDefault(p => p.Id == chat.LastMessage.UserId);
+                }
+                
                 Chats.Add(new ChatViewModel(this,chat));
             }
         });

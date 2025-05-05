@@ -8,6 +8,7 @@ using Teammato.Abstractions;
 using Teammato.Pages;
 using Teammato.Services;
 using Teammato.Utils;
+using System.Linq;
 
 namespace Teammato.ViewModels;
 
@@ -68,12 +69,26 @@ public class ChatViewModel : BaseViewModel
             }
         }
     }
+    
+    public Message LastMessage
+    {
+        get => _chat.LastMessage;
+        set
+        {
+            if (_chat.LastMessage != value)
+            {
+                _chat.LastMessage = value;
+                OnPropertyChanged("LastMessage");
+            }
+        }
+    }
     public ObservableCollection<Message> Messages { get;private set;  }
     public ObservableCollection<User> Participants { get;private set;  }
     private ChatsViewModel _chatsViewModel;
 
     public ICommand SelectChatCommand { get; private set; }
     public ICommand AddMessageCommand { get; private set; }
+    public ICommand GoBackCommand { get; private set; }
     public ChatViewModel(ChatsViewModel chatsViewModel,Chat chat)
     {
         this._chat = chat;
@@ -88,33 +103,53 @@ public class ChatViewModel : BaseViewModel
             await Shell.Current.Navigation.PushAsync(new ChatPage(this));
             
         });
-        AddMessageCommand = new Command(AddMessage);
-
+        AddMessageCommand = new Command(SendMessage);
+        GoBackCommand = new Command(GoBack);
         
     }
 
-    
+    public void AddMessage(Message message)
+    {
+        Messages.Add(message);
+        LastMessage = message;
 
+    }
     public async Task LoadMessages(int offset = 0)
     {
+        
         var messages = await RestAPIService.GetMessages(Id);
+        
         MainThread.BeginInvokeOnMainThread(() =>
         {
+            Messages.Clear();
             foreach (var msg in messages)
             {
                 msg.Sender = _chat.Participants.Where((user => user.Id == msg.UserId)).Select((user) => user).First();
                 Messages.Add(msg);
             }
             SimpleEventBus.Emit("ScrollToEnd");
+            if (messages.Count > 0)
+            {
+                LastMessage = messages[messages.Count - 1];    
+            }
+            
         });
         
     }
-    public async void AddMessage()
+    
+    public async void SendMessage()
     {
         
         //Messages.Add(new Message (MessageText, StorageService.CurrentUser));
         await RestAPIService.SendMessage(MessageText, Id);
         MessageText = "";
+    }
+
+    public async void GoBack()
+    {
+        
+        _chatsViewModel.SortChats();
+        await Shell.Current.Navigation.PopAsync();
     }
     
 }
