@@ -62,8 +62,13 @@
                         Command="{Binding ApplyChangesCommand}"
                         IsEnabled="{Binding IsModified}"/>
                 <!-- Preferred languages -->
-                
+                <Label Text="Languages"
+                       FontAttributes="Bold"
+                       FontSize="16"/>
                 <!-- Favorite games -->
+                <Label Text="Favorite games"
+                       FontAttributes="Bold"
+                       FontSize="16"/>
                 
                 <!-- Remove account and Logout buttons -->
                 <Button Text="Remove account" 
