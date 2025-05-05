@@ -22,7 +22,7 @@
         <Tab Title="Chats">
             <Tab.Icon>
                 <FontImageSource
-                    Glyph="&#xf007;"  
+                    Glyph="&#xf075;"  
                     FontFamily="FontAwesomeSolid"
                     Size="24"
                     Color="Black" />
@@ -32,7 +32,7 @@
         <Tab Title="Profile">
             <Tab.Icon>
                 <FontImageSource
-                    Glyph="&#xf075;"  
+                    Glyph="&#xf007;"  
                     FontFamily="FontAwesomeSolid"
                     Size="24"
                     Color="Black" />

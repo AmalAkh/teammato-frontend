@@ -10,7 +10,9 @@ public partial class App : Application
     public App()
     {
         InitializeComponent();
-        RestAPIService.Init("http://147.175.160.66:8080/");
+
+        RestAPIService.Init("http://192.168.100.3:8080/api/");
+
         Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping(nameof(IView.Background), (handler, view) =>
         {
             if (view is CustomEntry entry)
@@ -39,9 +41,36 @@ public partial class App : Application
 #endif
             }
         });
-    }
+        
+        Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping(nameof(IView.Background), (handler, view) =>
+        {
+            if (view is CustomEditor editor)
+            {
+#if ANDROID
+                var bg = new Android.Graphics.Drawables.GradientDrawable();
+                bg.SetStroke(2, editor.BorderColor.ToPlatform());
+                bg.SetColor(editor.BackgroundColor.ToPlatform());
+                bg.SetCornerRadius(32);
+                bg.SetPadding(20, 10, 10, 10);
 
-    
+                handler.PlatformView.Background = bg;
+#elif IOS
+                handler.PlatformView.Layer.BorderColor = editor.BorderColor.ToCGColor();
+                handler.PlatformView.BorderStyle = UIKit.UITextBorderStyle.RoundedRect;
+                handler.PlatformView.Layer.BackgroundColor = editor.BackgroundColor.ToCGColor();
+                handler.PlatformView.Layer.CornerRadius = 12; 
+                handler.PlatformView.Layer.BorderWidth = 0.5f;
+                
+                handler.PlatformView.Layer.MasksToBounds = true;
+                handler.PlatformView.BorderStyle = UIKit.UITextBorderStyle.None;
+                
+                var leftPadding = new UIKit.UIView(new CoreGraphics.CGRect(0, 0, 12, 0));
+                handler.PlatformView.LeftView = leftPadding;
+                handler.PlatformView.LeftViewMode = UIKit.UITextFieldViewMode.Always;
+#endif                
+            }
+        });
+    }
     
     protected override  Window CreateWindow(IActivationState? activationState)
     {
