@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Teammato.Pages;
 
-public partial class NewGameSessionPage : ContentPage
+public partial class FindPage : ContentPage
 {
-    public NewGameSessionPage()
+    public FindPage()
     {
         InitializeComponent();
     }

@@ -94,7 +94,6 @@ public class RestAPIService
 
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized) 
-
             {
                 throw new FailedAccessTokenRequestException();
             }
