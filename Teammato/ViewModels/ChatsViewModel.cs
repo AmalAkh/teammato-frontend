@@ -66,6 +66,7 @@ public class ChatsViewModel : BaseViewModel
     }
     public async Task LoadChats()
     {
+          
         var chats = await RestAPIService.GetChats();
         chats = chats.OrderByDescending((chat) => chat.LastMessage?.CreatedAt).ToList();
         MainThread.BeginInvokeOnMainThread(() =>

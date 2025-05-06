@@ -13,11 +13,20 @@ public class WebSocketService
     
     public static void AddHandler(Action<WebSocketNotification> handler) => _handlers.Add(handler);
     private static ClientWebSocket _client = new ClientWebSocket();
+    
+    public static WebSocketState State => _client.State;
     public static async  Task ConnectAsync(Uri uri)
     {
         var accessToken = RestAPIService.GetAccessToken();
-        await _client.ConnectAsync(uri,  CancellationToken.None);
-    
+        try
+        {
+            await _client.ConnectAsync(uri, CancellationToken.None);
+        }
+        catch (WebSocketException e)
+        {
+            return;
+        }
+
         await _client.SendAsync(Encoding.UTF8.GetBytes(accessToken), WebSocketMessageType.Text, true, CancellationToken.None);
         Task.Run(async ()=>
         {

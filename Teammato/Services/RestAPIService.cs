@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -112,6 +113,10 @@ public class RestAPIService
             return await StorageService.GetChatsAsync();
         }
 
+        if (WebSocketService.State != WebSocketState.Open)
+        {
+            WebSocketService.ConnectAsync(new Uri(new Uri(BaseAddress.Replace("http", "ws")),"ws"));
+        }
         try
         {
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "api/chats/list");
