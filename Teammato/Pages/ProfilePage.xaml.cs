@@ -21,6 +21,8 @@ public partial class ProfilePage : ContentPage
         if (BindingContext is ProfileViewModel viewModel)
         {
             await viewModel.LoadProfile();
+            await viewModel.LoadLanguages();
+            await viewModel.LoadFavoriteGames();
         }
     }
 }

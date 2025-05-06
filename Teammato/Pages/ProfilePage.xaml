@@ -93,13 +93,38 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
                 <!-- Favorite games -->
-                <Label Text="Favorite games"
-                       FontAttributes="Bold"
-                       FontSize="16"/>
+                <Grid ColumnDefinitions="*,Auto">
+                    <Label Text="Favorite games"
+                           FontAttributes="Bold"
+                           FontSize="16"
+                           VerticalOptions="Center"/>
+                    <Button Text="+" 
+                            Command="{Binding AddFavoriteGameCommand}"
+                            HeightRequest="10"
+                            WidthRequest="10"
+                            Grid.Column="1"
+                            HorizontalOptions="End"
+                            BackgroundColor="LightGray"
+                            TextColor="Black"
+                            CornerRadius="30"/>
+                </Grid>
+                <CollectionView ItemsSource="{Binding  FavoriteGames}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ColumnDefinitions="*, Auto">
+                                <Label Text="{Binding Name}" VerticalOptions="Center"/>
+                            <Button Text="Remove"
+                                    Command="{Binding BindingContext.RemoveFavoriteGameCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                    CommandParameter="{Binding GameID}"
+                                    Grid.Column="1"
+                                    BackgroundColor="Transparent"
+                                    TextColor="Purple"/>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
                 
-                <!-- Remove account and Logout buttons -->
-                <Button Text="Remove account" 
-                        Command="{Binding RemoveAccountCommand}"/>
+                <!-- Logout buttont -->
                 <Button Text="Logout" 
                         Command="{Binding LogOutCommand}"/>
             </VerticalStackLayout>

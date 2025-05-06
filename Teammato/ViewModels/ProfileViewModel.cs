@@ -3,7 +3,7 @@ using System.Text.Json;
 using System.Windows.Input;
 using System.Globalization;
 using Microsoft.Maui.Controls;
-using Teammato.Models;
+using Teammato.Abstractions;
 using Teammato.Pages;
 using Teammato.Services;
 
@@ -19,12 +19,16 @@ public class ProfileViewModel : BaseViewModel
     public ICommand AddLanguageCommand { get; }
     public ICommand RemoveLanguageCommand { get; }
     
+    public ICommand AddFavoriteGameCommand { get; }
+    public ICommand RemoveFavoriteGameCommand { get; }
+    
     private const string PROFILE_KEY = "user_profile";
     
     private UserProfile _userProfile = new UserProfile();
     private UserProfile _originalUserProfile = new UserProfile();
     
     public ObservableCollection<Language> PreferredLanguages { get; set; } = new();
+    public ObservableCollection<Game> FavoriteGames { get; set; } = new();
     
     private bool _isModified;
     public bool IsModified
@@ -71,6 +75,9 @@ public class ProfileViewModel : BaseViewModel
         
         AddLanguageCommand = new Command(async () => await AddLanguage());
         RemoveLanguageCommand = new Command<string>(RemoveLanguage);
+
+        AddFavoriteGameCommand = new Command(async () => await AddFavoriteGame());
+        RemoveFavoriteGameCommand = new Command<string>(RemoveFavoriteGame);
     }
 
     private async Task LogOut()
@@ -165,7 +172,6 @@ public class ProfileViewModel : BaseViewModel
                 {
                     var culture = new CultureInfo(language.ISOName);
                     language.Name = culture.EnglishName;
-                    
                 }
                 catch (CultureNotFoundException)
                 {
@@ -221,8 +227,6 @@ public class ProfileViewModel : BaseViewModel
         {
             
         }
-        
-        await LoadLanguages();
     }
     
     private void CheckIfModified()
@@ -231,13 +235,17 @@ public class ProfileViewModel : BaseViewModel
                      _userProfile.Description != _originalUserProfile.Description;
     }
     
-    public List<string> GetAllLanguages()
+    public List<Language> GetAllLanguages()
     {
-        List<string> languages = new List<string>();
+        List<Language> languages = new List<Language>();
         
         foreach (CultureInfo culture in CultureInfo.GetCultures(CultureTypes.NeutralCultures))
         {
-            languages.Add(culture.EnglishName);
+            languages.Add(new Language
+            {
+                Name = culture.EnglishName,
+                ISOName = culture.TwoLetterISOLanguageName
+            });
         }
 
         return languages;
@@ -246,16 +254,18 @@ public class ProfileViewModel : BaseViewModel
     private async Task AddLanguage()
     {
         var allLanguages = GetAllLanguages();
+        string[] names = allLanguages.Select(l => l.Name).ToArray();
         
-        var selectedLanguage = await Application.Current.MainPage.DisplayActionSheet(
-            "Select Language", "Cancel", null, allLanguages.ToArray());
+        var selected = await Application.Current.MainPage.DisplayActionSheet(
+            "Select Language", "Cancel", null, names);
         
-        if (!string.IsNullOrEmpty(selectedLanguage) && !PreferredLanguages.Any(l => l.Name == selectedLanguage))
+        if (selected != null && selected != "Cancel")
         {
+            var selectedLanguage = allLanguages.FirstOrDefault(l => l.Name == selected);
             var newLanguage = new Language
             {
-                Name = selectedLanguage,
-                ISOName = selectedLanguage.ToLower()
+                Name = selectedLanguage.Name,
+                ISOName = selectedLanguage.ISOName
             };
             
             var success = await RestAPIService.AddLanguage(newLanguage.ISOName);
@@ -284,6 +294,59 @@ public class ProfileViewModel : BaseViewModel
             else
             {
                 await App.Current.MainPage.DisplayAlert("Error", "Failed to remove language", "OK");
+            }
+        }
+    }
+    
+    public async Task LoadFavoriteGames()
+    {
+        var games = await RestAPIService.GetGames();
+        if (games != null)
+        {
+            FavoriteGames.Clear();
+            foreach (var game in games)
+            {
+                FavoriteGames.Add(game);
+            }
+        }
+    }
+    
+    private async void OnGameSelected(object sender, Game selectedGame)
+    {
+        if (selectedGame != null && !FavoriteGames.Any(g => g.GameID == selectedGame.GameID))
+        {
+            var success = await RestAPIService.AddGame(selectedGame);
+            if (success)
+            {
+                FavoriteGames.Add(selectedGame);
+            }
+            else
+            {
+                await App.Current.MainPage.DisplayAlert("Error", "Failed to add game", "OK");
+            }
+        }
+    }
+
+    private async Task AddFavoriteGame()
+    {
+        var gameSearchPage = new GameSearchPage();
+        gameSearchPage.GameSelected += OnGameSelected;
+        await Shell.Current.Navigation.PushAsync(gameSearchPage);
+    }
+    
+    private async void RemoveFavoriteGame(string gameID)
+    {
+        var gameToRemove = FavoriteGames.FirstOrDefault(g => g.GameID == gameID);
+        if (gameToRemove != null)
+        {
+            var success = await RestAPIService.RemoveGame(gameID);
+            if (success)
+            {
+                FavoriteGames.Remove(gameToRemove);
+            }
+            else
+            {
+                await App.Current.MainPage.DisplayAlert("Error", "Failed to remove favorite game", "OK");
             }
         }
     }

@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Teammato.Pages.GameSearchPage"
+             Title="Search Game"
+             xmlns:viewModels="clr-namespace:Teammato.ViewModels">
+
+    <ContentPage.BindingContext>
+        <viewModels:GameSearchViewModel />
+    </ContentPage.BindingContext>
+
+    <VerticalStackLayout Padding="20" Spacing="10">
+        <Entry Placeholder="Enter game name"
+               Text="{Binding SearchText, Mode=TwoWay}" />
+        
+        <CollectionView ItemsSource="{Binding SearchResults}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame>
+                        <Label Text="{Binding Name}">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding BindingContext.GameSelectedCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                    CommandParameter="{Binding .}" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </VerticalStackLayout>
+</ContentPage>
