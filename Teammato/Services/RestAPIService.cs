@@ -325,7 +325,7 @@ public class RestAPIService
         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, $"api/languages/{ISOName}");
         request.Headers.Add("Authorization", "Bearer " + _accessToken);
 
-        await WebSocketService.ConnectAsync(new Uri(new Uri(BaseAddress.Replace("http", "ws")),"ws"));
+        
         var response = await _client.SendAsync(request);
         return response.IsSuccessStatusCode;
     }
@@ -351,6 +351,7 @@ public class RestAPIService
 
             await UpdateAccessToken();
             StorageService.CurrentUser = await GetUser();
+            await WebSocketService.ConnectAsync(new Uri(new Uri(BaseAddress.Replace("http", "ws")),"ws"));
         }
         catch (FailedAccessTokenRequestException e)
         {
