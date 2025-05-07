@@ -19,6 +19,7 @@ public partial class LoginPage : ContentPage
         base.OnAppearing();
         await RestAPIService.CheckAuthorization();
         
+        
         if (RestAPIService.IsLoggedIn)
         {
             App.Current.MainPage = new AppShell();

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Akavache;
 using Microsoft.Maui.Networking;
 using Microsoft.Maui.Storage;
+using OneSignalSDK.DotNet;
 using Teammato.Abstractions;
 
 namespace Teammato.Services;
@@ -178,6 +179,7 @@ public class RestAPIService
     public static async Task LogOut()
     { 
         SecureStorage.Remove("refresh_token");
+        OneSignal.User.RemoveTag("UserId");
         IsLoggedIn = false;
     }
 
@@ -197,6 +199,7 @@ public class RestAPIService
 
     {
         _client.BaseAddress = new Uri(baseUrl);
+        
     }
 
     public static async Task<User> GetUser()
@@ -348,13 +351,13 @@ public class RestAPIService
         {
             return;
         }
+        
 
         try
         {
-
-
             await UpdateAccessToken();
             StorageService.CurrentUser = await GetUser();
+            OneSignal.User.AddTag("UserId", StorageService.CurrentUser.Id);
             await WebSocketService.ConnectAsync(new Uri(new Uri(BaseAddress.Replace("http", "ws")),"ws"));
         }
         catch (FailedAccessTokenRequestException e)
