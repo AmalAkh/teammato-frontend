@@ -1,4 +1,4 @@
-﻿namespace Teammato.Models;
+﻿namespace Teammato.Abstractions;
 
 public class UserSettings
 {

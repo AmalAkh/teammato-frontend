@@ -2,7 +2,7 @@
 using Microsoft.Maui.Storage;
 
 namespace Teammato.ViewModels;
-using Teammato.Models;
+using Teammato.Abstractions;
 
 public class SettingsViewModel : BaseViewModel
 {

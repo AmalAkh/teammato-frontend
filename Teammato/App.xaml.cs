@@ -14,9 +14,10 @@ public partial class App : Application
     {
         InitializeComponent();
 
-        RestAPIService.Init("http://147.175.160.66:8080/");
-        
-        
+
+        RestAPIService.Init("http://192.168.100.3:8080/");
+
+
         Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping(nameof(IView.Background), (handler, view) =>
         {
             if (view is CustomEntry entry)

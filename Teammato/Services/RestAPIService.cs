@@ -12,7 +12,7 @@ using Teammato.Abstractions;
 namespace Teammato.Services;
 using System.Reactive.Linq;
 using System.Net.Http;
-using Models;
+using Abstractions;
 public class RestAPIService
 {
     private static readonly HttpClient _client = new HttpClient();
@@ -321,12 +321,7 @@ public class RestAPIService
         
         return null;
     }
-
-   
-       
-
-        
-
+    
    public static async Task<bool> RemoveLanguage(string ISOName)
     {
         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, $"api/languages/{ISOName}");
@@ -336,6 +331,7 @@ public class RestAPIService
         var response = await _client.SendAsync(request);
         return response.IsSuccessStatusCode;
     }
+   
     public static async Task CheckAuthorization()
     {
         _refreshToken = await SecureStorage.GetAsync("refresh_token");
@@ -346,6 +342,7 @@ public class RestAPIService
             
             return;
         }
+
 
         if (Connectivity.NetworkAccess != NetworkAccess.Internet)
         {
@@ -368,6 +365,7 @@ public class RestAPIService
 
         
         
+
     }
     
     public static async Task<bool> AddLanguage(string ISOName)
@@ -382,6 +380,84 @@ public class RestAPIService
             
         var content = new StringContent(JsonSerializer.Serialize(data), null, "text/json");
         request.Content = content;
+        
+        var response = await _client.SendAsync(request);
+        return response.IsSuccessStatusCode;
+    }
+    
+    public static async Task<List<Game>> GetGames()
+    {
+        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"api/favorite-games/list");
+        request.Headers.Add("Authorization", "Bearer " + _accessToken);
+
+        var response = await _client.SendAsync(request);
+        if (response.IsSuccessStatusCode)
+        {
+            var content = await response.Content.ReadAsStreamAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            var games = JsonSerializer.Deserialize<List<Game>>(content, options);
+            Console.WriteLine(games);
+            return games;
+        }
+        
+        return null;
+    }
+
+    public static async Task<List<Game>> SearchGames(string Name)
+    {
+        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"api/favorite-games/available-list");
+        request.Headers.Add("Authorization", "Bearer " + _accessToken);
+        
+        var data = new Dictionary<string, string>
+        {
+            { "name", Name }
+        };
+            
+        var content = new StringContent(JsonSerializer.Serialize(data), null, "text/json");
+        request.Content = content;
+        
+        var response = await _client.SendAsync(request);
+        
+        if (response.IsSuccessStatusCode)
+        {
+            var received = await response.Content.ReadAsStreamAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            var games = JsonSerializer.Deserialize<List<Game>>(received, options);
+            return games;
+        }
+
+        return null;
+    }
+    
+    public static async Task<bool> AddGame(Game game)
+    {
+        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"api/favorite-games/new");
+        request.Headers.Add("Authorization", "Bearer " + _accessToken);
+
+        var data = new Dictionary<string, string>
+        {
+            { "gameId", game.GameID },
+            { "image", "" },
+            { "name", game.Name }
+        };
+            
+        var content = new StringContent(JsonSerializer.Serialize(data), null, "text/json");
+        request.Content = content;
+        
+        var response = await _client.SendAsync(request);
+        return response.IsSuccessStatusCode;
+    }
+    
+    public static async Task<bool> RemoveGame(string gameID)
+    {
+        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, $"api/favorite-games/{gameID}");
+        request.Headers.Add("Authorization", "Bearer " + _accessToken);
         
         var response = await _client.SendAsync(request);
         return response.IsSuccessStatusCode;
