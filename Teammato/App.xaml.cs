@@ -5,6 +5,7 @@ using Teammato.Services;
 using OneSignalSDK.DotNet;
 using OneSignalSDK.DotNet.Core;
 using OneSignalSDK.DotNet.Core.Debug;
+using Teammato.ViewModels;
 
 namespace Teammato;
 
@@ -15,7 +16,7 @@ public partial class App : Application
         InitializeComponent();
 
 
-        RestAPIService.Init("http://192.168.100.3:8080/");
+        RestAPIService.Init("http://192.168.1.68:8080/");
 
 
         Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping(nameof(IView.Background), (handler, view) =>
@@ -78,9 +79,14 @@ public partial class App : Application
             ;
         Akavache.Registrations.Start("Teammato");
         OneSignal.Initialize("3f107787-d140-4cee-a820-f7904d3911c6");
-       
+        
         OneSignal.Notifications.RequestPermissionAsync(true);
+
+
+        LocalProfileViewModel = new ProfileViewModel();
+        
     }
+    public static ProfileViewModel LocalProfileViewModel { get; set; }
     
     protected override  Window CreateWindow(IActivationState? activationState)
     {

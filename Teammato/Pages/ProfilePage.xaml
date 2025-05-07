@@ -17,7 +17,7 @@
     </Shell.TitleView>
     
     <ContentPage.BindingContext>
-        <viewModels:ProfileViewModel />
+        
     </ContentPage.BindingContext>
     
     <ContentPage.Content>
@@ -73,8 +73,8 @@
                             WidthRequest="10"
                             Grid.Column="1"
                             HorizontalOptions="End"
-                            BackgroundColor="LightGray"
-                            TextColor="Black"
+                           
+                           
                             CornerRadius="30"/>
                 </Grid>
                 <CollectionView ItemsSource="{Binding  PreferredLanguages}">
@@ -104,8 +104,7 @@
                             WidthRequest="10"
                             Grid.Column="1"
                             HorizontalOptions="End"
-                            BackgroundColor="LightGray"
-                            TextColor="Black"
+                            
                             CornerRadius="30"/>
                 </Grid>
                 <CollectionView ItemsSource="{Binding  FavoriteGames}">

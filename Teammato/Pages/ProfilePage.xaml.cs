@@ -18,11 +18,13 @@ public partial class ProfilePage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+        this.BindingContext = App.LocalProfileViewModel;
         if (BindingContext is ProfileViewModel viewModel)
         {
-            await viewModel.LoadProfile();
+            
+            /*await viewModel.LoadProfile();
             await viewModel.LoadLanguages();
-            await viewModel.LoadFavoriteGames();
+            await viewModel.LoadFavoriteGames();*/
         }
     }
 }

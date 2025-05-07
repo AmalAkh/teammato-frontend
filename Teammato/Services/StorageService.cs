@@ -3,7 +3,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Akavache;
 using Teammato.Abstractions;
-using Teammato.Models;
+using Teammato.Abstractions;
 
 namespace Teammato.Services;
 
