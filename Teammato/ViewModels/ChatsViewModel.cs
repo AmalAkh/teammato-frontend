@@ -56,13 +56,19 @@ public class ChatsViewModel : BaseViewModel
     {
         MainThread.BeginInvokeOnMainThread(() =>
         {
-            Chats = new ObservableCollection<ChatViewModel>(Chats.OrderByDescending((chat) => chat.LastMessage.CreatedAt).ToList());
+            var sortedChats = Chats.OrderByDescending((chat) => chat.LastMessage?.CreatedAt).ToList();
+            Chats.Clear();
+            foreach (var chat in sortedChats)
+            {
+                Chats.Add(chat);
+            }
         });
     }
     public async Task LoadChats()
     {
+          
         var chats = await RestAPIService.GetChats();
-        chats = chats.OrderByDescending((chat) => chat.LastMessage.CreatedAt).ToList();
+        chats = chats.OrderByDescending((chat) => chat.LastMessage?.CreatedAt).ToList();
         MainThread.BeginInvokeOnMainThread(() =>
         {
             foreach (var chat in chats)

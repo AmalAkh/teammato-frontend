@@ -1,8 +1,16 @@
+using System.Collections.Generic;
+using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
+using Akavache;
+using Microsoft.Maui.Networking;
+using Microsoft.Maui.Storage;
+using OneSignalSDK.DotNet;
 using Teammato.Abstractions;
 
 namespace Teammato.Services;
+using System.Reactive.Linq;
 using System.Net.Http;
 using Abstractions;
 public class RestAPIService
@@ -78,53 +86,92 @@ public class RestAPIService
         
         request.Headers.Add("Authorization", "Bearer " + _refreshToken);
 
-        
-        var response = await _client.SendAsync(request);
-        if (response.IsSuccessStatusCode)
+        try
         {
-            _accessToken = await response.Content.ReadAsStringAsync();
+            var response = await _client.SendAsync(request);
+            if (response.IsSuccessStatusCode)
+            {
+                _accessToken = await response.Content.ReadAsStringAsync();
+
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized) 
+            {
+                throw new FailedAccessTokenRequestException();
+            }
+        }
+        catch (HttpRequestException e)
+        {
             
         }
-        else
-        {
-            throw new FailedAccessTokenRequestException();
-        }
-      
+
     }
 
     public static async Task<List<Chat>> GetChats()
     {
-        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "api/chats/list");
-        request.Headers.Add("Authorization", "Bearer " + _accessToken);
-        var response = await _client.SendAsync(request);
-        if (response.IsSuccessStatusCode)
+        if (Connectivity.NetworkAccess != NetworkAccess.Internet)
         {
-            return JsonSerializer.Deserialize<List<Chat>>(await response.Content.ReadAsStringAsync());
-            
+            return await StorageService.GetChatsAsync();
         }
-        else if(response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+
+        if (WebSocketService.State != WebSocketState.Open)
         {
-            await UpdateAccessToken();
-            return await GetChats();
+            WebSocketService.ConnectAsync(new Uri(new Uri(BaseAddress.Replace("http", "ws")),"ws"));
+        }
+        try
+        {
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "api/chats/list");
+            request.Headers.Add("Authorization", "Bearer " + _accessToken);
+            var response = await _client.SendAsync(request);
+            if (response.IsSuccessStatusCode)
+            {
+                var chats = JsonSerializer.Deserialize<List<Chat>>(await response.Content.ReadAsStringAsync());
+                await BlobCache.UserAccount.InsertObject<List<Chat>>("chats", chats);
+                return chats;
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                await UpdateAccessToken();
+                return await GetChats();
+            }
+        }
+        catch (HttpRequestException e)
+        {
+            return await StorageService.GetChatsAsync();
         }
 
         throw new Exception();
     }
     public static async Task<List<Message>> GetMessages(string chatId)
     {
-        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"api/messages/{chatId}/messages");
-        request.Headers.Add("Authorization", "Bearer " + _accessToken);
-        var response = await _client.SendAsync(request);
-        if (response.IsSuccessStatusCode)
+        if (Connectivity.NetworkAccess != NetworkAccess.Internet)
         {
-            return JsonSerializer.Deserialize<List<Message>>(await response.Content.ReadAsStringAsync());
-            
+            return await StorageService.GetMessagesAsync(chatId);
         }
-        else if(response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+
+        try
         {
-            await UpdateAccessToken();
-            return await GetMessages(chatId);
+
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"api/messages/{chatId}/messages");
+            request.Headers.Add("Authorization", "Bearer " + _accessToken);
+            var response = await _client.SendAsync(request);
+            if (response.IsSuccessStatusCode)
+            {
+                var messages = JsonSerializer.Deserialize<List<Message>>(await response.Content.ReadAsStringAsync());
+                await BlobCache.UserAccount.InsertObject<List<Message>>($"chat-{chatId}-messages", messages);
+                return messages;
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                await UpdateAccessToken();
+                return await GetMessages(chatId);
+            }
         }
+        catch (HttpRequestException e)
+        {
+            return await StorageService.GetMessagesAsync(chatId);
+        }
+        
 
         throw new Exception();
     }
@@ -132,6 +179,7 @@ public class RestAPIService
     public static async Task LogOut()
     { 
         SecureStorage.Remove("refresh_token");
+        OneSignal.User.RemoveTag("UserId");
         IsLoggedIn = false;
     }
 
@@ -151,22 +199,37 @@ public class RestAPIService
 
     {
         _client.BaseAddress = new Uri(baseUrl);
+        
     }
 
     public static async Task<User> GetUser()
     {
-        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "api/users/info");
-        request.Headers.Add("Authorization", "Bearer " + _accessToken);
-        var response = await _client.SendAsync(request);
-        if (response.IsSuccessStatusCode)
+        if (Connectivity.NetworkAccess != NetworkAccess.Internet)
         {
-            return JsonSerializer.Deserialize<User>(await response.Content.ReadAsStringAsync());
-            
+            return await StorageService.GetUserAsync();
         }
-        else if(response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+
+        try
         {
-            await UpdateAccessToken();
-            return await GetUser();
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "api/users/info");
+            request.Headers.Add("Authorization", "Bearer " + _accessToken);
+            var response = await _client.SendAsync(request);
+            if (response.IsSuccessStatusCode)
+            {
+                var user = JsonSerializer.Deserialize<User>(await response.Content.ReadAsStringAsync());
+                await BlobCache.UserAccount.InsertObject<User>("user", user);
+                return user;
+
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                await UpdateAccessToken();
+                return await GetUser();
+            }
+        }
+        catch (HttpRequestException e)
+        {
+            return await StorageService.GetUserAsync();
         }
 
         throw new Exception();
@@ -263,6 +326,7 @@ public class RestAPIService
     {
         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, $"api/languages/{ISOName}");
         request.Headers.Add("Authorization", "Bearer " + _accessToken);
+
         
         var response = await _client.SendAsync(request);
         return response.IsSuccessStatusCode;
@@ -278,9 +342,30 @@ public class RestAPIService
             
             return;
         }
-        await UpdateAccessToken();
-        await WebSocketService.ConnectAsync(new Uri(new Uri(BaseAddress.Replace("http", "ws")),"ws"));
-        StorageService.CurrentUser = await GetUser();
+
+
+        if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+        {
+            return;
+        }
+        
+
+        try
+        {
+            await UpdateAccessToken();
+            StorageService.CurrentUser = await GetUser();
+            OneSignal.User.AddTag("UserId", StorageService.CurrentUser.Id);
+            await WebSocketService.ConnectAsync(new Uri(new Uri(BaseAddress.Replace("http", "ws")),"ws"));
+        }
+        catch (FailedAccessTokenRequestException e)
+        {
+            IsLoggedIn = false;
+            return;
+        }
+
+        
+        
+
     }
     
     public static async Task<bool> AddLanguage(string ISOName)
