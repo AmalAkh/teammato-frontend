@@ -462,4 +462,29 @@ public class RestAPIService
         var response = await _client.SendAsync(request);
         return response.IsSuccessStatusCode;
     }
+    public static async Task<GameSession> CreateGame(GameSessionConfig gameSessionConfig)
+    {
+        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"api/gamesessions/new");
+        request.Headers.Add("Authorization", "Bearer " + _accessToken);
+        request.Content = new StringContent(JsonSerializer.Serialize(gameSessionConfig), null, "text/json");
+        var response = await _client.SendAsync(request);
+        
+        if (response.IsSuccessStatusCode)
+        {
+            var content = await response.Content.ReadAsStreamAsync();
+           
+            return JsonSerializer.Deserialize<GameSession>(content);
+        }else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            await UpdateAccessToken();
+            return await CreateGame(gameSessionConfig);
+        }
+
+        throw new Exception();
+
+
+
+    }
+    
+    
 }

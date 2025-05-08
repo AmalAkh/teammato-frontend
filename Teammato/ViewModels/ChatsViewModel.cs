@@ -21,7 +21,7 @@ public class ChatsViewModel : BaseViewModel
         Chats = new ObservableCollection<ChatViewModel>();
         Task.Run(async () => await LoadChats());
    
-        WebSocketService.AddHandler((notification) =>
+        WebSocketService.AddHandler("ChatsPageHandler",(notification) =>
         {
             if (notification.Type == WebSocketNotificationType.NewChatMessage)
             {

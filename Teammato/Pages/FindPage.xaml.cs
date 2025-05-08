@@ -25,4 +25,9 @@ public partial class FindPage : ContentPage
       
         
     }
+
+    private void CreateGameButton_OnClicked(object? sender, EventArgs e)
+    {
+        Shell.Current.Navigation.PushAsync(new CreateGamePage());
+    }
 }

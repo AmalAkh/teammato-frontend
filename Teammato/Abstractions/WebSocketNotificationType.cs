@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace Teammato.Abstractions;
 
 
@@ -7,6 +9,8 @@ public enum WebSocketNotificationType
 }
 public class WebSocketNotification
 {
+    [JsonPropertyName("type")]
     public WebSocketNotificationType Type {get;set;}
+    [JsonPropertyName("content")]
     public string Content {get;set;}
 }

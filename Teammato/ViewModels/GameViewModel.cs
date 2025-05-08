@@ -8,7 +8,7 @@ namespace Teammato.ViewModels;
 public class GameViewModel : INotifyPropertyChanged
 {
     private Game _game { get; set; }
-
+    public Game Game{get{return _game;}}
     public string Name
     {
         get
@@ -58,5 +58,10 @@ public class GameViewModel : INotifyPropertyChanged
     public  GameViewModel(Game game)
     {
         _game = game;
+    }
+
+    public override string ToString()
+    {
+        return Name;
     }
 }

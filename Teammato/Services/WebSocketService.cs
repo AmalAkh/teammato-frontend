@@ -9,9 +9,10 @@ using System.Text;
 using System.Net.WebSockets;
 public class WebSocketService
 {
-    private static List<Action<WebSocketNotification>> _handlers = new List<Action<WebSocketNotification>>();
+    private static Dictionary<string,Action<WebSocketNotification>> _handlers = new Dictionary<string,Action<WebSocketNotification>>();
     
-    public static void AddHandler(Action<WebSocketNotification> handler) => _handlers.Add(handler);
+    public static void AddHandler(string id,Action<WebSocketNotification> handler) => _handlers.Add(id, handler);
+    public static void RemoveHandler(string id) => _handlers.Remove(id);
     private static ClientWebSocket _client = new ClientWebSocket();
     
     public static WebSocketState State => _client.State;
@@ -37,9 +38,9 @@ public class WebSocketService
                 var message = Encoding.UTF8.GetString(buffer, 0, result.Count);
                 WebSocketNotification notification = JsonSerializer.Deserialize<WebSocketNotification>(message);
                 Console.WriteLine("Received: " + message);
-                foreach (var handler in _handlers)
+                foreach (var handlerPair in _handlers)
                 {
-                    handler(notification);
+                    handlerPair.Value(notification);
                 }
             }
 
