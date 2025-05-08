@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:Teammato.Controls"
+             x:Class="Teammato.Pages.SignUpPage"
+             xmlns:viewModels="clr-namespace:Teammato.ViewModels">
+    
+    <ContentPage.BindingContext>
+        <viewModels:SignUpViewModel />
+    </ContentPage.BindingContext>
+    
+    <ContentPage.Content>
+        <StackLayout Padding="30"
+                     Spacing="10">
+            <Label Text="Sign Up"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"/>
+            
+            <controls:CustomEntry Placeholder="Nickname" 
+                                  Text="{Binding Nickname, Mode=OneWayToSource}" 
+                                  Margin="4"/>
+            <Frame BorderColor="DarkRed"  
+                   Margin="4"
+                   Padding="4"
+                   IsVisible="{Binding NoNickname}">
+                <StackLayout Orientation="Horizontal">
+                    <Image>
+                        <Image.Source>
+                            <FontImageSource 
+                                Color="Black"
+                                FontFamily="FontAwesomeSolid"
+                                Size="14"
+                                Glyph="&#xf06a;"/>
+                        </Image.Source>
+                    </Image>
+                    <Label HorizontalOptions="Fill" Text="Please enter a nickname."/>
+                </StackLayout>
+            </Frame>
+            <controls:CustomEntry Placeholder="E-mail" 
+                                  Text="{Binding Email, Mode=OneWayToSource}" 
+                                  Margin="4"/>
+            <Frame BorderColor="DarkRed"  
+                   Margin="4"
+                   Padding="4"
+                   IsVisible="{Binding NoEmail}">
+                <StackLayout Orientation="Horizontal">
+                    <Image>
+                        <Image.Source>
+                            <FontImageSource 
+                                Color="Black"
+                                FontFamily="FontAwesomeSolid"
+                                Size="14"
+                                Glyph="&#xf06a;"/>
+                        </Image.Source>
+                    </Image>
+                    <Label HorizontalOptions="Fill" Text="Please enter an e-mail."/>
+                </StackLayout>
+            </Frame>
+            <Frame BorderColor="DarkRed"  
+                   Margin="4"
+                   Padding="4"
+                   IsVisible="{Binding WrongEmailFormat}">
+                <StackLayout Orientation="Horizontal">
+                    <Image>
+                        <Image.Source>
+                            <FontImageSource 
+                                Color="Black"
+                                FontFamily="FontAwesomeSolid"
+                                Size="14"
+                                Glyph="&#xf06a;"/>
+                        </Image.Source>
+                    </Image>
+                    <Label HorizontalOptions="Fill" Text="Wrong e-mail format."/>
+                </StackLayout>
+            </Frame>
+            <controls:CustomEntry Placeholder="Password" 
+                                  Text="{Binding Password, Mode=OneWayToSource}"
+                                  IsPassword="True" 
+                                  Margin="4"/>
+            <Frame BorderColor="DarkRed"  
+                   Margin="4"
+                   Padding="4"
+                   IsVisible="{Binding NoPassword}">
+                <StackLayout Orientation="Horizontal">
+                    <Image>
+                        <Image.Source>
+                            <FontImageSource 
+                                Color="Black"
+                                FontFamily="FontAwesomeSolid"
+                                Size="14"
+                                Glyph="&#xf06a;"/>
+                        </Image.Source>
+                    </Image>
+                    <Label HorizontalOptions="Fill" Text="Please enter a password."/>
+                </StackLayout>
+            </Frame>
+            <controls:CustomEntry Placeholder="RepeatPassword" 
+                                  Text="{Binding RepeatPassword, Mode=OneWayToSource}"
+                                  IsPassword="True" 
+                                  Margin="4"/>
+            <Frame BorderColor="DarkRed"  
+                   Margin="4"
+                   Padding="4"
+                   IsVisible="{Binding PasswordsDoNotMatch}">
+                <StackLayout Orientation="Horizontal">
+                    <Image>
+                        <Image.Source>
+                            <FontImageSource 
+                                Color="Black"
+                                FontFamily="FontAwesomeSolid"
+                                Size="14"
+                                Glyph="&#xf06a;"/>
+                        </Image.Source>
+                    </Image>
+                    <Label HorizontalOptions="Fill" Text="Passwords do not match."/>
+                </StackLayout>
+            </Frame>
+            
+            <Button Text="Create Account"
+                    Command="{Binding SignUpCommand}"
+                    Margin="4"/>
+            
+            <Button Text="Back"
+                    Command="{Binding SignInCommand}"
+                    Margin="4"/>
+            
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

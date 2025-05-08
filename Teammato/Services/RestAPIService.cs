@@ -52,6 +52,27 @@ public class RestAPIService
         }
       
     }
+    
+    public static async Task<bool> SignUp(string email, string nickname, string password)
+    {
+        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "api/users/new");
+        Dictionary<string, string> data = new Dictionary<string, string>();
+
+        data.Add("nickname", nickname);
+        data.Add("email", email);
+        data.Add("password", password);
+
+        var content = new StringContent(JsonSerializer.Serialize(data), null, "text/json");
+        request.Content = content;
+        var signup_response = await _client.SendAsync(request);
+        if (signup_response.IsSuccessStatusCode)
+        {
+            var signin_response = await SignIn(email, password);
+            return signin_response;
+        }
+        return false;
+    }
+    
     public static async Task<bool> SignIn(string login, string password)
     {
         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "api/users/signin");
@@ -180,6 +201,7 @@ public class RestAPIService
     { 
         SecureStorage.Remove("refresh_token");
         OneSignal.User.RemoveTag("UserId");
+        await BlobCache.UserAccount.InvalidateAll();
         IsLoggedIn = false;
     }
 
