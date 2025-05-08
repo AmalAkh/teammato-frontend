@@ -22,8 +22,12 @@ public class User
     [JsonPropertyName(("id"))]
     public string ?Id{get;set;}
 
-
-      
-
-
+    public override bool Equals(object? obj)
+    {
+        if (typeof(User) != obj.GetType())
+        {
+            return false;
+        }
+        return (obj as User).Id == Id;
+    }
 }

@@ -138,6 +138,7 @@ public class CreateGameSessionViewModel : BaseViewModel
             PlayersCount = TeammatesCount,
             Duration = Duration,
             
+            
         };
         foreach (var language in Languages)
         {

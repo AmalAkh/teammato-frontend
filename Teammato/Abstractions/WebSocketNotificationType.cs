@@ -5,7 +5,7 @@ namespace Teammato.Abstractions;
 
 public enum WebSocketNotificationType
 {
-    NewPlayerJoined, PlayerLeavedGameSession, NewChatMessage, GameSessionStarted, SuccessAuth
+    NewPlayerJoined, PlayerLeavedGameSession, NewChatMessage, GameSessionStarted, SuccessAuth,GameSessionCancelled
 }
 public class WebSocketNotification
 {

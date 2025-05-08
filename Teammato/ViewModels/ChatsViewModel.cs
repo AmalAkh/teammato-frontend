@@ -6,7 +6,8 @@ using Microsoft.Maui.ApplicationModel;
 using Teammato.Abstractions;
 using Teammato.Pages;
 using Teammato.Services;
-
+using Teammato.Utils;
+using System.Text;
 namespace Teammato.ViewModels;
 
 public class ChatsViewModel : BaseViewModel
@@ -19,7 +20,11 @@ public class ChatsViewModel : BaseViewModel
     public ChatsViewModel()
     {
         Chats = new ObservableCollection<ChatViewModel>();
-        Task.Run(async () => await LoadChats());
+        Task.Run(async () =>
+        {
+            await LoadChats();
+            
+        });
    
         WebSocketService.AddHandler("ChatsPageHandler",(notification) =>
         {
@@ -51,7 +56,7 @@ public class ChatsViewModel : BaseViewModel
         });
         
     }
-
+    
     public void SortChats()
     {
         MainThread.BeginInvokeOnMainThread(() =>
@@ -64,13 +69,28 @@ public class ChatsViewModel : BaseViewModel
             }
         });
     }
+
+    public async Task OpenNewChat()
+    {
+        if (!string.IsNullOrEmpty(ChatPageBus.NewChatId))
+        {
+            await LoadChats();
+            var chat = Chats.Where((chat) => chat.Id == ChatPageBus.NewChatId).FirstOrDefault();
+            ChatPageBus.NewChatId = null;
+            SelectedChat = chat;
+            await Shell.Current.Navigation.PushAsync(new ChatPage(chat));
+            
+            
+        }
+    }
     public async Task LoadChats()
     {
-          
+        
         var chats = await RestAPIService.GetChats();
         chats = chats.OrderByDescending((chat) => chat.LastMessage?.CreatedAt).ToList();
         MainThread.BeginInvokeOnMainThread(() =>
         {
+            Chats.Clear();
             foreach (var chat in chats)
             {
                 if (chat.LastMessage != null)

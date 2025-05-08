@@ -25,8 +25,8 @@
                             <ColumnDefinition Width="60"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Frame Margin="20,0,0,0" CornerRadius="50" IsClippedToBounds="True" WidthRequest="50"  Grid.Column="0" HeightRequest="50">
-                            <Image WidthRequest="50" Source="{Binding Image}"  Grid.Column="0" HeightRequest="50" BackgroundColor="Gray"/>
+                        <Frame Margin="20,0,0,0" CornerRadius="5" IsClippedToBounds="True" WidthRequest="30"  Grid.Column="0" HeightRequest="50">
+                            <Image WidthRequest="60" Source="{Binding Image}"  Grid.Column="0" HeightRequest="50" BackgroundColor="Gray"/>
                         </Frame>
                         <StackLayout Grid.Column="1">
                             <Label  MaxLines="1" FontAttributes="Bold" Margin="10,0,0,6"   Text="{Binding Name}"/>
