@@ -241,6 +241,11 @@ public class RestAPIService
     
     public static async Task<bool> UploadProfileImage(Stream imageStream, string fileName)
     {
+        if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+        {
+            return false;
+        }
+        
         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, "api/users/upload-image");
         request.Headers.Add("Authorization", "Bearer " + _accessToken);
         
@@ -257,6 +262,11 @@ public class RestAPIService
     
     public static async Task<UserProfile> GetProfile()
     {
+        if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+        {
+            return await StorageService.GetProfileAsync();
+        }
+        
         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "api/users/profile");
         request.Headers.Add("Authorization", "Bearer " + _accessToken);
 
@@ -270,7 +280,7 @@ public class RestAPIService
                 PropertyNameCaseInsensitive = true
             };
             var userProfile = await JsonSerializer.DeserializeAsync<UserProfile>(content, options);
-            
+            await BlobCache.UserAccount.InsertObject<UserProfile>("user_profile", userProfile);
             return userProfile;
         }
 
@@ -279,6 +289,11 @@ public class RestAPIService
 
     public static async Task<bool> UpdateProfile(UserProfile userProfile)
     {
+        if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+        {
+            return false;
+        }
+        
         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, "api/users/profile-update");
         request.Headers.Add("Authorization", "Bearer " + _accessToken);
 
@@ -304,6 +319,11 @@ public class RestAPIService
 
     public static async Task<List<Language>> GetLanguages()
     {
+        if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+        {
+            return await StorageService.GetLanguagesAsync();
+        }
+        
         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "api/languages/list");
         request.Headers.Add("Authorization", "Bearer " + _accessToken);
         
@@ -316,6 +336,7 @@ public class RestAPIService
                 PropertyNameCaseInsensitive = true
             };
             var languages = JsonSerializer.Deserialize<List<Language>>(content, options);
+            await BlobCache.UserAccount.InsertObject<List<Language>>("preferred_languages", languages);
             return languages;
         }
         
@@ -324,6 +345,11 @@ public class RestAPIService
     
    public static async Task<bool> RemoveLanguage(string ISOName)
     {
+        if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+        {
+            return false;
+        }
+        
         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, $"api/languages/{ISOName}");
         request.Headers.Add("Authorization", "Bearer " + _accessToken);
 
@@ -370,6 +396,11 @@ public class RestAPIService
     
     public static async Task<bool> AddLanguage(string ISOName)
     {
+        if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+        {
+            return false;
+        }
+        
         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"api/languages/new");
         request.Headers.Add("Authorization", "Bearer " + _accessToken);
 
@@ -387,6 +418,11 @@ public class RestAPIService
     
     public static async Task<List<Game>> GetGames()
     {
+        if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+        {
+            return await StorageService.GetGamesAsync();
+        }
+        
         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"api/favorite-games/list");
         request.Headers.Add("Authorization", "Bearer " + _accessToken);
 
@@ -399,7 +435,7 @@ public class RestAPIService
                 PropertyNameCaseInsensitive = true
             };
             var games = JsonSerializer.Deserialize<List<Game>>(content, options);
-            Console.WriteLine(games);
+            await BlobCache.UserAccount.InsertObject<List<Game>>("favorite_games", games);
             return games;
         }
         
@@ -408,6 +444,11 @@ public class RestAPIService
 
     public static async Task<List<Game>> SearchGames(string Name)
     {
+        if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+        {
+            return null;
+        }
+        
         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"api/favorite-games/available-list");
         request.Headers.Add("Authorization", "Bearer " + _accessToken);
         
@@ -437,6 +478,11 @@ public class RestAPIService
     
     public static async Task<bool> AddGame(Game game)
     {
+        if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+        {
+            return false;
+        }
+        
         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"api/favorite-games/new");
         request.Headers.Add("Authorization", "Bearer " + _accessToken);
 
@@ -456,6 +502,11 @@ public class RestAPIService
     
     public static async Task<bool> RemoveGame(string gameID)
     {
+        if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+        {
+            return false;
+        }
+        
         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, $"api/favorite-games/{gameID}");
         request.Headers.Add("Authorization", "Bearer " + _accessToken);
         

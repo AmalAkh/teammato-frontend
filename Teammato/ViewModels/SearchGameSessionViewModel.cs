@@ -1,5 +1,5 @@
 using System.Collections.ObjectModel;
-using Teammato.Models;
+using Teammato.Abstractions;
 
 namespace Teammato.ViewModels;
 
