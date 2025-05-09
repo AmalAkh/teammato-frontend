@@ -10,7 +10,7 @@
             
             <ScrollView FlexLayout.Basis="92%">
                 <StackLayout Padding="10">
-                    <Label Text="Games" FontAttributes="Bold" FontSize="18"/>
+                    <Label Text="Games" FontAttributes="Bold" Style="{DynamicResource Title}"/>
                     <CollectionView ItemsSource="{Binding Games}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
@@ -19,12 +19,12 @@
                                     <CheckBox Grid.Column="0" IsChecked="{Binding IsSelected, Mode=TwoWay }" >
                                         
                                     </CheckBox>
-                                    <Label FontAttributes="Bold" FontSize="16" Grid.Column="1" VerticalTextAlignment="Center" Text="{Binding Name}" VerticalOptions="Center"/>
+                                    <Label FontAttributes="Bold" Grid.Column="1" VerticalTextAlignment="Center" Text="{Binding Name}" VerticalOptions="Center"/>
                                 </Grid>     
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
-                    <Label Text="Languages" FontAttributes="Bold" FontSize="18"/>
+                    <Label Text="Languages"  Style="{DynamicResource Title}"/>
                     <CollectionView ItemsSource="{Binding Languages}">
                         
                         <CollectionView.ItemTemplate>
@@ -34,7 +34,7 @@
                                     <CheckBox Grid.Column="0" IsChecked="{Binding IsSelected, Mode=TwoWay }" >
                                         
                                     </CheckBox>
-                                    <Label FontAttributes="Bold" FontSize="16" Grid.Column="1" VerticalTextAlignment="Center" Text="{Binding Name}" VerticalOptions="Center"/>
+                                    <Label FontAttributes="Bold" Grid.Column="1" VerticalTextAlignment="Center" Text="{Binding Name}" VerticalOptions="Center"/>
                                 </Grid>     
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
@@ -44,7 +44,7 @@
                         <Label Text="Teammates" FontAttributes="Bold" VerticalTextAlignment="Center"/>
                         <controls:CustomEntry Grid.Column="1" ReturnType="Done" Text="{Binding TeammatesCount, Mode=TwoWay}"  Keyboard="Numeric"  />
                     </Grid>
-                    <Label Text="Duration" FontAttributes="Bold" FontSize="18"/>
+                    <Label Text="Duration" Style="{DynamicResource Title}"/>
                     <Grid Margin="0,10,0,0" ColumnDefinitions="*,*,*, *, *">
                         
                         <Label Text="From" Grid.Column="0" VerticalTextAlignment="Center"/>

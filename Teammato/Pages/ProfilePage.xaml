@@ -11,7 +11,7 @@
             <Label Text="Profile"
                    HorizontalOptions="Center"
                    VerticalOptions="Center"
-                   FontSize="20"
+                   Style="{DynamicResource Title}"
                    FontAttributes="Bold" />
         </Grid>
     </Shell.TitleView>
@@ -41,16 +41,16 @@
                 <!-- Profile name and description -->
                 <Label Text="Nickname"
                        FontAttributes="Bold"
-                       FontSize="16"/>
+                       />
                 <!-- <controls:CustomEntry Text="{Binding Nickname, Mode=TwoWay}"   -->
                 <!--                       Margin="4"/> -->
-                <Entry Text="{Binding Nickname, Mode=TwoWay}"
+                <controls:CustomEntry Text="{Binding Nickname, Mode=TwoWay}"
                        Margin="4"/>
                 
                 <Label Text="Description"
                        FontAttributes="Bold"
-                       FontSize="16"/>
-                <Editor Text="{Binding Description, Mode=TwoWay}"
+                       />
+                <controls:CustomEditor Text="{Binding Description, Mode=TwoWay}"
                         AutoSize="TextChanges"
                         Margin="4"/>
                 <!-- <controls:CustomEditor Text="{Binding Description, Mode=TwoWay}" -->
@@ -113,11 +113,12 @@
                             <Grid ColumnDefinitions="*, Auto">
                                 <Label Text="{Binding Name}" VerticalOptions="Center"/>
                             <Button Text="Remove"
+                                    Style="{DynamicResource LinkButton}"
                                     Command="{Binding BindingContext.RemoveFavoriteGameCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
                                     CommandParameter="{Binding GameID}"
                                     Grid.Column="1"
-                                    BackgroundColor="Transparent"
-                                    TextColor="Purple"/>
+                                    
+                                    />
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>

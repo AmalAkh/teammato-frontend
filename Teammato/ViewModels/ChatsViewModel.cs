@@ -15,7 +15,7 @@ public class ChatsViewModel : BaseViewModel
     public ObservableCollection<ChatViewModel> Chats { private set; get; }
 
 
-    internal ChatViewModel SelectedChat { get; set; }
+    public ChatViewModel SelectedChat { get; set; }
    
     public ChatsViewModel()
     {

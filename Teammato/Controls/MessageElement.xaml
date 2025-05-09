@@ -18,8 +18,8 @@
         
         <StackLayout Grid.Column="1" Padding="2">
             <Label Margin="2" FontAttributes="Bold" Text="{Binding SenderNickName}"/>
-            <Label Text="{Binding TextContent}" FontSize="16"/>
-            <Label Text="{Binding CreatedAt}" FontSize="8" Margin="0,4,0,0"/>
+            <Label Text="{Binding TextContent}"/>
+            <Label Text="{Binding CreatedAt}" Style="{DynamicResource SmallText}" Margin="0,4,0,0"/>
                                     
         </StackLayout>
                                 

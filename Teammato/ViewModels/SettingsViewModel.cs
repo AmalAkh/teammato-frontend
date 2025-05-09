@@ -32,6 +32,57 @@ public class SettingsViewModel : BaseViewModel
             if (_userSettings.DarkTheme != value)
             {
                 _userSettings.DarkTheme = value;
+                if (!_userSettings.UseSystemTheme)
+                {
+                    if (_userSettings.DarkTheme)
+                    {
+                        App.Current.UserAppTheme = AppTheme.Dark;
+                    }
+                    else
+                    {
+                        App.Current.UserAppTheme = AppTheme.Light;
+                    }
+                }
+
+                OnPropertyChanged();
+                SaveSettingsAsync();
+            }
+        }
+    }
+
+    public bool UseSystemTheme
+    {
+        get => _userSettings.UseSystemTheme;
+        set
+        {
+            if (_userSettings.UseSystemTheme != value)
+            {
+                _userSettings.UseSystemTheme = value;
+                if (_userSettings.UseSystemTheme)
+                {
+                    App.Current.RequestedThemeChanged +=
+
+                    (s, e) =>
+                    {
+                        App.Current.UserAppTheme = e.RequestedTheme;
+                        if (e.RequestedTheme == AppTheme.Light)
+                        {
+                            _userSettings.DarkTheme = false;
+                        }
+                        else
+                        {
+                            _userSettings.DarkTheme = true;
+                        }
+                    };
+                }
+                else
+                {
+                    App.Current.RequestedThemeChanged += (s, e) =>
+                    {
+                    };
+                }
+                
+                
                 OnPropertyChanged();
                 SaveSettingsAsync();
             }
@@ -47,6 +98,7 @@ public class SettingsViewModel : BaseViewModel
             {
                 _userSettings.Geoposition = value;
                 OnPropertyChanged();
+                
                 SaveSettingsAsync();
             }
         }
@@ -54,6 +106,7 @@ public class SettingsViewModel : BaseViewModel
     
     public async Task LoadSettingsAsync()
     {
+        
         try
         {
             var json = await SecureStorage.GetAsync(SETTINGS_KEY);
@@ -66,10 +119,11 @@ public class SettingsViewModel : BaseViewModel
         {
             _userSettings = new UserSettings();
         }
-
+        
         OnPropertyChanged(nameof(Notifications));
         OnPropertyChanged(nameof(DarkTheme));
         OnPropertyChanged(nameof(Geoposition));
+        OnPropertyChanged(nameof(UseSystemTheme));
     }
     
     private async void SaveSettingsAsync()
