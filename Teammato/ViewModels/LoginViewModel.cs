@@ -40,6 +40,7 @@ public class LoginViewModel : BaseViewModel
     
 
     public ICommand SignInCommand { get; private set; }
+    public ICommand SignUpCommand { get; private set; }
 
     public LoginViewModel()
     {
@@ -49,14 +50,21 @@ public class LoginViewModel : BaseViewModel
             {
                 IsAuthFailed = await RestAPIService.SignIn(_login, _password);
             }
+            else
+            {
+                return;
+            }
 
             IsAuthFailed = !IsAuthFailed;
             if (!IsAuthFailed)
             {
                 App.Current.MainPage = new AppShell();    
             }
-            
-            
+        });
+
+        SignUpCommand = new Command(async () =>
+        {
+            App.Current.MainPage = new Teammato.Pages.SignUpPage();
         });
     }
 }

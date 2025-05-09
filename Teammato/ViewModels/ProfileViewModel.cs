@@ -2,17 +2,18 @@ using System.Collections.ObjectModel;
 using System.Text.Json;
 using System.Windows.Input;
 using System.Globalization;
+using System.Reactive.Linq;
 using Microsoft.Maui.Controls;
 using Teammato.Abstractions;
 using Teammato.Pages;
 using Teammato.Services;
+using Akavache;
 
 namespace Teammato.ViewModels;
 
 public class ProfileViewModel : BaseViewModel
 {
     public ICommand LogOutCommand { get; private set; }
-    public ICommand RemoveAccountCommand { get; private set; }
     public ICommand ApplyChangesCommand { get; private set; }
     public ICommand PickProfileImageCommand { get; private set; }
     
@@ -22,13 +23,21 @@ public class ProfileViewModel : BaseViewModel
     public ICommand AddFavoriteGameCommand { get; }
     public ICommand RemoveFavoriteGameCommand { get; }
     
-    private const string PROFILE_KEY = "user_profile";
-    
     private UserProfile _userProfile = new UserProfile();
     private UserProfile _originalUserProfile = new UserProfile();
-    
     public ObservableCollection<Language> PreferredLanguages { get; set; } = new();
     public ObservableCollection<Game> FavoriteGames { get; set; } = new();
+
+    private string _profileImageUrl;
+    public string ProfileImageUrl
+    {
+        get => string.IsNullOrEmpty(_userProfile.ImageUrl) ? null : $"http://192.168.100.3:8080/static/{_userProfile.ImageUrl}";
+        set
+        {
+            _userProfile.ImageUrl = value;
+            OnPropertyChanged(nameof(ProfileImageUrl));
+        }
+    }
     
     private bool _isModified;
     public bool IsModified
@@ -69,8 +78,6 @@ public class ProfileViewModel : BaseViewModel
         
         LogOutCommand = new Command(async () => await LogOut());
         
-        RemoveAccountCommand = new Command(async () => RemoveAccount());
-        
         ApplyChangesCommand = new Command(async () => ApplyChanges());
         
         AddLanguageCommand = new Command(async () => await AddLanguage());
@@ -84,11 +91,6 @@ public class ProfileViewModel : BaseViewModel
     {
         await RestAPIService.LogOut();
         App.Current.MainPage = new LoginPage();
-    }
-
-    private async Task RemoveAccount()
-    {
-        // TODO
     }
 
     private async Task ApplyChanges()
@@ -107,11 +109,17 @@ public class ProfileViewModel : BaseViewModel
             _originalUserProfile = new UserProfile
             {
                 Nickname = Nickname,
-                Description = Description
+                Description = Description,
+                ImageUrl = _userProfile.ImageUrl
             };
             
-            await SaveProfileAsync();
+            await BlobCache.UserAccount.InsertObject("user_profile", _originalUserProfile);
+            
             IsModified = false;
+        }
+        else
+        {
+            await App.Current.MainPage.DisplayAlert("Error", "Profile data could not be updated", "OK");
         }
     }
 
@@ -139,24 +147,11 @@ public class ProfileViewModel : BaseViewModel
 
         if (success)
         {
-            // TODO
+            await LoadProfile();
         }
         else
         {
             await App.Current.MainPage.DisplayAlert("Error", "Profile image could not be uploaded", "OK");
-        }
-    }
-    
-    private async Task SaveProfileAsync()
-    {
-        try
-        {
-            var json = JsonSerializer.Serialize(_userProfile);
-            await SecureStorage.SetAsync(PROFILE_KEY, json);
-        }
-        catch
-        {
-
         }
     }
     
@@ -186,26 +181,6 @@ public class ProfileViewModel : BaseViewModel
     {
         try
         {
-            var json = await SecureStorage.GetAsync(PROFILE_KEY);
-            if (!string.IsNullOrEmpty(json))
-            {
-                _userProfile = JsonSerializer.Deserialize<UserProfile>(json) ?? new UserProfile();
-                _originalUserProfile = JsonSerializer.Deserialize<UserProfile>(json) ?? new UserProfile();
-            }
-        }
-        catch
-        {
-            _userProfile = new UserProfile();
-            _originalUserProfile = new UserProfile();
-        }
-
-        OnPropertyChanged(nameof(Nickname));
-        OnPropertyChanged(nameof(Description));
-        CheckIfModified();
-
-        // Server data
-        try
-        {
             var serverUserProfile = await RestAPIService.GetProfile();
             if (serverUserProfile != null)
             {
@@ -213,13 +188,14 @@ public class ProfileViewModel : BaseViewModel
                 _originalUserProfile = new UserProfile
                 {
                     Nickname = serverUserProfile.Nickname,
-                    Description = serverUserProfile.Description
+                    Description = serverUserProfile.Description,
+                    ImageUrl = serverUserProfile.ImageUrl
                 };
-
-                await SaveProfileAsync();
+                ProfileImageUrl = _userProfile.ImageUrl;
 
                 OnPropertyChanged(nameof(Nickname));
                 OnPropertyChanged(nameof(Description));
+                OnPropertyChanged(nameof(ProfileImageUrl));
                 CheckIfModified();
             }
         }
@@ -273,6 +249,7 @@ public class ProfileViewModel : BaseViewModel
             if (success)
             {
                 PreferredLanguages.Add(newLanguage);
+                await BlobCache.UserAccount.InsertObject("preferred_languages", PreferredLanguages);
             }
             else
             {
@@ -290,6 +267,7 @@ public class ProfileViewModel : BaseViewModel
             if (success)
             {
                 PreferredLanguages.Remove(languageToRemove);
+                await BlobCache.UserAccount.InsertObject("preferred_languages", PreferredLanguages);
             }
             else
             {
@@ -319,6 +297,7 @@ public class ProfileViewModel : BaseViewModel
             if (success)
             {
                 FavoriteGames.Add(selectedGame);
+                await BlobCache.UserAccount.InsertObject("favorite_games", FavoriteGames);
             }
             else
             {
@@ -343,6 +322,7 @@ public class ProfileViewModel : BaseViewModel
             if (success)
             {
                 FavoriteGames.Remove(gameToRemove);
+                await BlobCache.UserAccount.InsertObject("favorite_games", FavoriteGames);
             }
             else
             {

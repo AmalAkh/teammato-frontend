@@ -36,7 +36,8 @@
                        Padding="0">
                     <ImageButton x:Name="ProfileImage"
                                  Aspect="AspectFill"
-                                 Command="{Binding PickProfileImageCommand}"/>
+                                 Command="{Binding PickProfileImageCommand}"
+                                 Source="{Binding ProfileImageUrl}"/>
                 </Frame>
                 <!-- Profile name and description -->
                 <Label Text="Nickname"

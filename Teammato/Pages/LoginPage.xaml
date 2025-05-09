@@ -40,7 +40,8 @@
                     
                 </Frame>
                 <Button Text="Sign In" Margin="4,6,4,1" Command="{Binding SignInCommand}"/>
-                <Button Text="Sign Up" Margin="4,1,4,2"/>
+                <Button Text="Sign Up" Margin="4,1,4,2"
+                        Command="{Binding SignUpCommand}"/>
                 
             </StackLayout>
                
