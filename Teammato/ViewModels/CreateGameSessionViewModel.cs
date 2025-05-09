@@ -1,13 +1,14 @@
 using System.Collections.ObjectModel;
-
+using System.Net.WebSockets;
 using System.Windows.Input;
 using Teammato.Abstractions;
-
+using Teammato.Pages;
+using Teammato.Services;
 
 
 namespace Teammato.ViewModels;
 
-public class SearchGameSessionViewModel : BaseViewModel
+public class CreateGameSessionViewModel : BaseViewModel
 {
     private ObservableCollection<Language> _languages {
         get;
@@ -18,9 +19,9 @@ public class SearchGameSessionViewModel : BaseViewModel
         set;
     }
 
-    private uint _temmatesCount = 0;
+    private int _temmatesCount = 0;
 
-    public uint TeammatesCount
+    public int TeammatesCount
     {
         get { return _temmatesCount; }
         set
@@ -33,39 +34,20 @@ public class SearchGameSessionViewModel : BaseViewModel
         }
     }
 
-    private double durationFrom = 1;
+    private double duration = 1;
     
-    public double DurationFrom 
+    public double Duration
     {
         get
         {
-            return durationFrom ;
+            return duration;
         }
         set
         {
-            if (durationFrom  != value)
+            if (duration != value)
             {
-                durationFrom  = value;
-                OnPropertyChanged("DurationFrom");
-            }
-        }
-        
-    }
-    
-    private double durationTo = 2;
-    
-    public double DurationTo
-    {
-        get
-        {
-            return durationTo ;
-        }
-        set
-        {
-            if (durationTo  != value)
-            {
-                durationTo  = value;
-                OnPropertyChanged("DurationTo");
+                duration  = value;
+                OnPropertyChanged("Duration");
             }
         }
         
@@ -89,18 +71,38 @@ public class SearchGameSessionViewModel : BaseViewModel
         
     }
     
+    private GameViewModel _targetGame;
+    public GameViewModel TargetGame
+    {
+        get
+        {
+            return _targetGame;
+        }
+        set
+        {
+            if (_targetGame != value)
+            {
+                _targetGame = value;
+                OnPropertyChanged("TargetGame");
+            }
+        }
+        
+    }
     
     public  ICommand AddLanguageCommand { get; protected set; }
     
     public ObservableCollection<LanguageViewModel> Languages { get; set; }
     public ObservableCollection<GameViewModel> Games { get; set; }
     
-    public SearchGameSessionViewModel()
+    public ICommand CreateGameCommand { get; protected set; }
+    public CreateGameSessionViewModel()
     {
+        CreateGameCommand = new Command(CreateGame);
         _languages = App.LocalProfileViewModel.PreferredLanguages;
         _games = App.LocalProfileViewModel.FavoriteGames;
         Languages = new ObservableCollection<LanguageViewModel>();
         Games = new ObservableCollection<GameViewModel>();
+     
         foreach (var language in _languages)
         {
             Languages.Add(new LanguageViewModel(language));
@@ -126,7 +128,33 @@ public class SearchGameSessionViewModel : BaseViewModel
             }
         };
     }
-    
+
+
+    public async void CreateGame()
+    {
+        var gameSessionConfig = new GameSessionConfig()
+        {
+            GameId = TargetGame.Game.GameID,
+            PlayersCount = TeammatesCount,
+            Duration = Duration,
+            
+            
+        };
+        foreach (var language in Languages)
+        {
+            if (language.IsSelected)
+            {
+                gameSessionConfig.Languages.Add(language.ISOName);
+            }
+        }
+
+        
+        if (WebSocketService.State == WebSocketState.Open)
+        {
+            var gameSession = await RestAPIService.CreateGame(gameSessionConfig);
+            await Shell.Current.Navigation.PushAsync(new WaitingRoomPage(gameSession));
+        }
+    }
     
     
 

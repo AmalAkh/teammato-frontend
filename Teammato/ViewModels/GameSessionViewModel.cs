@@ -1,0 +1,88 @@
+using System.Collections.ObjectModel;
+using System.Text.Json;
+using System.Windows.Input;
+using Teammato.Abstractions;
+using Teammato.Services;
+using Teammato.Utils;
+
+namespace Teammato.ViewModels;
+
+public class GameSessionViewModel : BaseViewModel
+{
+    public GameSession GameSession { get; set; }
+    
+    public string GameName 
+    {
+        get
+        {
+            return GameSession.GameName;
+        }
+        set
+        {
+            if (value != GameSession.GameName)
+            {
+                GameSession.GameName = value;
+                OnPropertyChanged("GameName");
+                
+            }
+            
+            
+        }
+        
+    }
+    public ICommand CancelCommand { get; private set; }
+
+    public ICommand StartGameCommand { get; private set; }
+    public ObservableCollection<User> Participants { get; set; } = new ObservableCollection<User>();
+
+    public GameSessionViewModel(GameSession gameSession)
+    {
+        this.GameSession = gameSession;
+
+        foreach (var participant in gameSession.Participants)
+        {
+            if (participant.Id != gameSession.Owner.Id)
+            {
+                Participants.Add(participant);
+            }
+        }
+        WebSocketService.AddHandler("GameSessionWaitingRoom", async (notification) =>
+        {
+            if (notification.Type == WebSocketNotificationType.NewPlayerJoined)
+            {
+                var user = JsonSerializer.Deserialize<User>(notification.Content);
+                Participants.Add(user);
+            }else if (notification.Type == WebSocketNotificationType.PlayerLeavedGameSession)
+            {
+                var user = JsonSerializer.Deserialize<User>(notification.Content);
+                Participants.Remove(user);
+            }else if (notification.Type == WebSocketNotificationType.GameSessionCancelled)
+            {
+                await Shell.Current.DisplayAlert("Game session cancelled", "Game session cancelled", "OK");
+                await Shell.Current.Navigation.PopAsync();
+            }
+        });
+
+        CancelCommand = new Command(Cancel);
+        StartGameCommand = new Command(StartGame);
+    }
+    
+    public async void Cancel()
+    {
+
+        await RestAPIService.CancelGame(GameSession.Id);
+        await Shell.Current.Navigation.PopAsync();
+        WebSocketService.RemoveHandler("GameSessionWaitingRoom");
+    }
+
+    public async void StartGame()
+    {
+        var chatId = await RestAPIService.StartGame(GameSession.Id);
+        await Shell.Current.Navigation.PopAsync();
+        await Shell.Current.Navigation.PopAsync();
+        ChatPageBus.NewChatId = chatId;
+        await Shell.Current.GoToAsync("//chats");
+    }
+    
+    
+}

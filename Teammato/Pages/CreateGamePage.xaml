@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Teammato.Pages.CreateGamePage"
+             Title="Create new game"
+             xmlns:controls="clr-namespace:Teammato.Controls"
+             xmlns:viewModels="clr-namespace:Teammato.ViewModels">
+    <ContentPage.BindingContext>
+        <viewModels:CreateGameSessionViewModel/>
+    </ContentPage.BindingContext>
+        <ContentPage.Content>
+        <ScrollView>
+            <StackLayout Padding="10">
+                <Label  Text="Game" FontAttributes="Bold" FontSize="18"/>
+                <Grid Margin="0,10,0,0" ColumnDefinitions=" *">
+                    
+                    <controls:CustomPicker SelectedItem="{Binding TargetGame, Mode=TwoWay}" ItemsSource="{Binding Games}"/>
+                </Grid>
+                <Label Margin="0,10,0,0" Text="Languages" FontAttributes="Bold" FontSize="18"/>
+                <CollectionView Margin="0,10,0,0" ItemsSource="{Binding Languages}">
+                        
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ColumnDefinitions="*,9*" Padding="4,10,10,10">
+                                    
+                                <CheckBox Grid.Column="0" IsChecked="{Binding IsSelected, Mode=TwoWay }" >
+                                        
+                                </CheckBox>
+                                <Label FontAttributes="Bold" FontSize="16" Grid.Column="1" VerticalTextAlignment="Center" Text="{Binding Name}" VerticalOptions="Center"/>
+                            </Grid>     
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                        
+                </CollectionView>
+                <Grid Margin="0,10,0,0" ColumnDefinitions="4*, *">
+                    <Label Text="Teammates" FontAttributes="Bold" VerticalTextAlignment="Center"/>
+                    <controls:CustomEntry Grid.Column="1" ReturnType="Done" Text="{Binding TeammatesCount, Mode=TwoWay}"  Keyboard="Numeric"  />
+                </Grid>
+                <Grid Margin="0,10,0,0" ColumnDefinitions="4*, *">
+                    <Label Text="Duration" FontAttributes="Bold" VerticalTextAlignment="Center"/>
+                    <controls:CustomEntry Grid.Column="1" ReturnType="Done" Text="{Binding Duration, Mode=TwoWay}"  Keyboard="Numeric"  />
+                </Grid>
+                <controls:CustomEditor Placeholder="Description" Margin="0,10,0,0" HeightRequest="150" />
+                <Button Command="{Binding CreateGameCommand}" Text="Create game" Margin="0,10,0,0"/>
+            </StackLayout>
+            
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

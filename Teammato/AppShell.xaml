@@ -9,7 +9,7 @@
     Title="Teammato">
 
     <TabBar>
-        <Tab Title="Find">
+        <Tab Title="Find" Route="find">
             <Tab.Icon>
                 <FontImageSource
                     Glyph="&#xf11b;"  
@@ -19,7 +19,7 @@
             </Tab.Icon>
             <ShellContent Title="Play" ContentTemplate="{DataTemplate pages:FindPage}"/>
         </Tab>
-        <Tab Title="Chats">
+        <Tab Title="Chats" Route="chats">
             <Tab.Icon>
                 <FontImageSource
                     Glyph="&#xf075;"  
