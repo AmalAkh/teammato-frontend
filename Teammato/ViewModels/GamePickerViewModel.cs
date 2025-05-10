@@ -1,6 +1,8 @@
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Teammato.Abstractions;
+using Teammato.Pages;
+using Teammato.Services;
 
 namespace Teammato.ViewModels;
 
@@ -28,6 +30,7 @@ public class GamePickerViewModel: BaseViewModel
     }
     public ICommand NextCommand { get; private set; }
     public ICommand BackCommand { get; private set; }
+    public ICommand JoinGameSessionCommand { get; private set; }
     public GamePickerViewModel(List<GameSession> gamesSessions)
     {
         GameSessions = new ObservableCollection<GameSession>();
@@ -39,6 +42,7 @@ public class GamePickerViewModel: BaseViewModel
         SelectedGameSession = GameSessions[0];
         NextCommand = new Command(Next);
         BackCommand = new Command(Back);
+        JoinGameSessionCommand = new Command(JoinGameSession);
 
 
     }
@@ -59,6 +63,14 @@ public class GamePickerViewModel: BaseViewModel
             
             _selectedGameSessionIndex--;
             SelectedGameSession = GameSessions[_selectedGameSessionIndex];
+        }
+    }
+
+    public async void JoinGameSession()
+    {
+        if (await RestAPIService.JoinGameSession(SelectedGameSession.Id))
+        {
+            await Shell.Current.Navigation.PushAsync(new WaitingRoomPage(SelectedGameSession));
         }
     }
 }

@@ -4,10 +4,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Teammato.Pages.WaitingRoomPage"
              Title="Waiting room"
-             Shell.TabBarIsVisible="False">
+             Shell.TabBarIsVisible="False"
+             xmlns:utils ="clr-namespace:Teammato.Utils">
     <Shell.BackButtonBehavior>
         <BackButtonBehavior Command="{Binding CancelCommand}"/>
     </Shell.BackButtonBehavior>
+    <ContentPage.Resources>
+        <utils:UrlImageConverter x:Key="UrlImageConverter"/>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <Grid Padding="6" RowDefinitions="Auto,*,Auto">
             
@@ -24,18 +28,18 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <Frame Margin="20,0,0,0" CornerRadius="50" IsClippedToBounds="True" WidthRequest="50"  Grid.Column="0" HeightRequest="50">
-                                <Image WidthRequest="50"  Source="{Binding Image}"  Grid.Column="0" HeightRequest="50" BackgroundColor="Gray"/>
+                                <Image Aspect="AspectFill" WidthRequest="50"  Source="{Binding Image, Converter={StaticResource UrlImageConverter}}"  Grid.Column="0" HeightRequest="50" BackgroundColor="Gray"/>
                             </Frame>
-                            <StackLayout Grid.Column="1">
-                                <Label VerticalTextAlignment="Center"  MaxLines="1" FontAttributes="Bold" Margin="10,0,0,6"   Text="{Binding NickName}"/>
+                            
+                            <Label  Grid.Column="1" VerticalTextAlignment="Center"  MaxLines="1" FontAttributes="Bold" Margin="10,0,0,6"   Text="{Binding NickName}"/>
                                 
-                            </StackLayout>
+                            
                         </Grid>
                                 
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-            <Button Text="Start" Command="{Binding StartGameCommand}" Grid.Row="2" />
+            <Button Text="Start" IsVisible="{Binding IsOwned}" Command="{Binding StartGameCommand}" Grid.Row="2" />
             
         </Grid>
     </ContentPage.Content>

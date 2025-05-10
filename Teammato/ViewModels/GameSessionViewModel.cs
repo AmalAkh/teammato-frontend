@@ -88,17 +88,58 @@ public class GameSessionViewModel : BaseViewModel
     public ICommand StartGameCommand { get; private set; }
     public ObservableCollection<User> Participants { get; set; } = new ObservableCollection<User>();
 
+    private bool _isOwned = false;
+    public bool IsOwned
+    {
+        get
+        {
+            return _isOwned;
+        }
+        set
+        {
+            if (value != _isOwned)
+            {
+                _isOwned = value;
+                OnPropertyChanged(nameof(IsOwned));
+                
+            }
+        }
+    }
     public GameSessionViewModel(GameSession gameSession)
     {
         this.GameSession = gameSession;
-
-        foreach (var participant in gameSession.Participants)
+        if (gameSession.Owner.Id == StorageService.CurrentUser.Id)
         {
-            if (participant.Id != gameSession.Owner.Id)
+            IsOwned = true;
+        }
+
+        if (!IsOwned)
+        {
+            Task.Run(async () =>
             {
-                Participants.Add(participant);
+                MainThread.BeginInvokeOnMainThread(async () =>
+                {
+                    GameSession.Participants = await RestAPIService.GetGameSessionParticipants(gameSession.Id);
+                    foreach (var participant in gameSession.Participants)
+                    {
+                        
+                        Participants.Add(participant);
+                        
+                    }
+                });
+            });
+        }
+        else
+        {
+            foreach (var participant in gameSession.Participants)
+            {
+                if (participant.Id != gameSession.Owner.Id)
+                {
+                    Participants.Add(participant);
+                }
             }
         }
+
         WebSocketService.AddHandler("GameSessionWaitingRoom", async (notification) =>
         {
             if (notification.Type == WebSocketNotificationType.NewPlayerJoined)
@@ -111,8 +152,25 @@ public class GameSessionViewModel : BaseViewModel
                 Participants.Remove(user);
             }else if (notification.Type == WebSocketNotificationType.GameSessionCancelled)
             {
-                await Shell.Current.DisplayAlert("Game session cancelled", "Game session cancelled", "OK");
-                await Shell.Current.Navigation.PopAsync();
+                MainThread.BeginInvokeOnMainThread(async () =>
+                {
+                    await Shell.Current.DisplayAlert("Game session cancelled", "Game session cancelled", "OK");
+                    await Shell.Current.Navigation.PopAsync();
+                    await Shell.Current.Navigation.PopAsync();
+                });
+            }else if (notification.Type == WebSocketNotificationType.GameSessionStarted)
+            {
+                
+                MainThread.BeginInvokeOnMainThread(async () =>
+                {
+                    Dictionary<string, string> data =
+                        JsonSerializer.Deserialize<Dictionary<string, string>>(notification.Content);
+                    await Shell.Current.Navigation.PopAsync();
+                    await Shell.Current.Navigation.PopAsync();
+                    ChatPageBus.NewChatId = data["chatId"];
+                    await Shell.Current.GoToAsync("//chats");
+                });
+
             }
         });
 
@@ -122,10 +180,13 @@ public class GameSessionViewModel : BaseViewModel
     
     public async void Cancel()
     {
-
-        await RestAPIService.CancelGame(GameSession.Id);
-        await Shell.Current.Navigation.PopAsync();
+        if (IsOwned)
+        {
+            await RestAPIService.CancelGame(GameSession.Id);
+        }
         WebSocketService.RemoveHandler("GameSessionWaitingRoom");
+        await Shell.Current.Navigation.PopAsync();
+        
     }
 
     public async void StartGame()

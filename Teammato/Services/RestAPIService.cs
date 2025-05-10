@@ -231,6 +231,69 @@ public class RestAPIService
 
         throw new Exception();
     }
+    public static async Task<List<User>> GetGameSessionParticipants(string gameSessionId)
+    {
+        
+
+        try
+        {
+
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"api/gamesessions/{gameSessionId}/users");
+            request.Headers.Add("Authorization", "Bearer " + _accessToken);
+            var response = await _client.SendAsync(request);
+            
+            if (response.IsSuccessStatusCode)
+            {
+                var users = JsonSerializer.Deserialize<List<User>>(await response.Content.ReadAsStringAsync());
+                
+                return users;
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                await UpdateAccessToken();
+                return await GetGameSessionParticipants(gameSessionId);
+            }
+        }
+        catch (HttpRequestException e)
+        {
+            throw new Exception();
+        }
+        
+
+        throw new Exception();
+    }
+    
+    public static async Task<bool> JoinGameSession(string gameSessionId)
+    {
+        
+
+        try
+        {
+
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"api/gamesessions/{gameSessionId}/join");
+            request.Headers.Add("Authorization", "Bearer " + _accessToken);
+            var response = await _client.SendAsync(request);
+            
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                await UpdateAccessToken();
+                return await JoinGameSession(gameSessionId);
+            }
+        }
+        catch (HttpRequestException e)
+        {
+            throw new Exception();
+        }
+        
+
+        throw new Exception();
+    }
 
     public static async Task LogOut()
     { 

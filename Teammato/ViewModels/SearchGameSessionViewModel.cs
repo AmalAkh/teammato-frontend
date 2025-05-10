@@ -170,7 +170,14 @@ public class SearchGameSessionViewModel : BaseViewModel
 
         
         var gameSessions = await RestAPIService.GetGameSessions(config);
-        await Shell.Current.Navigation.PushAsync(new GamePickerPage(gameSessions));
+        if (gameSessions.Count > 0)
+        {
+            await Shell.Current.Navigation.PushAsync(new GamePickerPage(gameSessions));
+        }
+        else
+        {
+            await Shell.Current.DisplayAlert("No session found", "Try with different filters, please", "OK");
+        }
 
     }
     
