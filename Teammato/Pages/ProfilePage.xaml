@@ -84,11 +84,12 @@
                             <Grid ColumnDefinitions="*, Auto">
                                 <Label Text="{Binding Name}" VerticalOptions="Center"/>
                                 <Button Text="Remove"
+                                        Style="{DynamicResource LinkButton}"
                                         Command="{Binding BindingContext.RemoveLanguageCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
                                         CommandParameter="{Binding ISOName}"
                                         Grid.Column="1"
                                         BackgroundColor="Transparent"
-                                        TextColor="Purple"/>
+                                        />
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>

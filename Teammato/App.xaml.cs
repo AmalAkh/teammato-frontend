@@ -114,9 +114,11 @@ public partial class App : Application
 
 
         LocalProfileViewModel = new ProfileViewModel();
+        SettingsViewModel = new SettingsViewModel();
         
     }
     public static ProfileViewModel LocalProfileViewModel { get; set; }
+    public static SettingsViewModel SettingsViewModel { get; set; }
     
     protected override  Window CreateWindow(IActivationState? activationState)
     {

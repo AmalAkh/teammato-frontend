@@ -7,4 +7,5 @@ public class UserSettings
     public bool Geoposition { get; set; }
     
     public bool UseSystemTheme { get; set; }
+    public bool UseBigFonts { get; set; }
 }

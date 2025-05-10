@@ -103,6 +103,21 @@ public class SettingsViewModel : BaseViewModel
             }
         }
     }
+    public bool UseBigFonts
+    {
+        get => _userSettings.UseBigFonts;
+        set
+        {
+            if (_userSettings.UseBigFonts != value)
+            {
+                _userSettings.UseBigFonts = value;
+                OnPropertyChanged();
+                ApplyBigFonts(!value);
+                
+                SaveSettingsAsync();
+            }
+        }
+    }
     
     public async Task LoadSettingsAsync()
     {
@@ -137,5 +152,36 @@ public class SettingsViewModel : BaseViewModel
         {
             
         }
+    }
+
+    public SettingsViewModel()
+    {
+        Task.Run(async () =>
+        {
+            await LoadSettingsAsync();
+            
+            ApplyBigFonts(!UseBigFonts);
+            
+        });
+
+    }
+
+    public void ApplyBigFonts(bool revert = false)
+    {
+        MainThread.BeginInvokeOnMainThread(async () =>
+        {
+            if (revert)
+            {
+                Application.Current.Resources["BasicFontSize"] = 14;
+                Application.Current.Resources["TitleFontSize"] = 18;
+            }
+            else
+            {
+                Application.Current.Resources["BasicFontSize"] = 26;
+                Application.Current.Resources["TitleFontSize"] = 30;
+            }
+            
+        });
+      
     }
 }

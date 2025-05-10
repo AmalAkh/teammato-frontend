@@ -5,6 +5,15 @@
              x:Class="Teammato.Pages.ChatsPage"
              xmlns:utils="clr-namespace:Teammato.Utils"
              xmlns:viewModels="clr-namespace:Teammato.ViewModels">
+    <Shell.TitleView>
+        <Grid>
+            <Label Text="Settings"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   Style="{DynamicResource Title}"
+                   FontAttributes="Bold" />
+        </Grid>
+    </Shell.TitleView>
     <ContentPage.BindingContext>
         <viewModels:ChatsViewModel/>
     </ContentPage.BindingContext>
@@ -12,7 +21,9 @@
         <ResourceDictionary>
             <utils:IGDBUrlImageConverter x:Key="ChatUrlImageConverter" />
         </ResourceDictionary>
+        
     </ContentPage.Resources>
+    
         <ContentPage.Content>
         <CollectionView ItemsSource="{Binding Chats}" SelectedItem="{Binding SelectedChat, Mode=TwoWay}" SelectionChangedCommand="{Binding SelectChatCommand}" SelectionMode="Single">
             <CollectionView.ItemTemplate>

@@ -21,7 +21,7 @@
         <Setter Property="StrokeThickness" Value="1"/>
     </Style>
     <Style TargetType="Border" x:Key="LastMessageFrame">
-        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray100}}"/>
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray600}}"/>
         <Setter Property="StrokeShape" Value="RoundRectangle 7,7,7,7"></Setter>
         <Setter Property="StrokeThickness" Value="0"/>
     </Style>
