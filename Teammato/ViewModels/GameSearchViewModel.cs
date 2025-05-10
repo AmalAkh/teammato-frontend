@@ -47,4 +47,6 @@ public class GameSearchViewModel : BaseViewModel
                 SearchResults.Add(game);
         }
     }
+
+    
 }

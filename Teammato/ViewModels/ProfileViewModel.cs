@@ -31,7 +31,7 @@ public class ProfileViewModel : BaseViewModel
     private string _profileImageUrl;
     public string ProfileImageUrl
     {
-        get => string.IsNullOrEmpty(_userProfile.ImageUrl) ? null : $"http://192.168.100.3:8080/static/{_userProfile.ImageUrl}";
+        get => string.IsNullOrEmpty(_userProfile.ImageUrl) ? null : $"{RestAPIService.BaseAddress}static/{_userProfile.ImageUrl}";
         set
         {
             _userProfile.ImageUrl = value;

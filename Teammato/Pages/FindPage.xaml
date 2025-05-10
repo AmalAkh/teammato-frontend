@@ -62,7 +62,7 @@
                 
             </ScrollView>
             <FlexLayout FlexLayout.Basis="8%">
-                <Button Margin="2" Text="Search" FlexLayout.Basis="50%"/>
+                <Button Command="{Binding SearchCommand}" Margin="2" Text="Search" FlexLayout.Basis="50%"/>
                 <Button Margin="2" Clicked="CreateGameButton_OnClicked" Text="Create a game" FlexLayout.Basis="50%"/>
             </FlexLayout>
         </FlexLayout>

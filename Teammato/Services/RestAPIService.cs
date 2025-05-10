@@ -7,6 +7,7 @@ using Akavache;
 using Microsoft.Maui.Networking;
 using Microsoft.Maui.Storage;
 using OneSignalSDK.DotNet;
+using OneSignalSDK.DotNet.Core.Internal.Utilities;
 using Teammato.Abstractions;
 
 namespace Teammato.Services;
@@ -191,6 +192,40 @@ public class RestAPIService
         catch (HttpRequestException e)
         {
             return await StorageService.GetMessagesAsync(chatId);
+        }
+        
+
+        throw new Exception();
+    }
+    
+    public static async Task<List<GameSession>> GetGameSessions(GameSessionSearchConfig config)
+    {
+        
+
+        try
+        {
+
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"api/gamesessions/list");
+            request.Content = new StringContent(JsonSerializer.Serialize(config), null, "text/json");
+            request.Headers.Add("Authorization", "Bearer " + _accessToken);
+            var response = await _client.SendAsync(request);
+            var str = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                var sessions = JsonSerializer.Deserialize<List<GameSession>>(await response.Content.ReadAsStringAsync());
+                
+                return sessions;
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                await UpdateAccessToken();
+                return await GetGameSessions(config);
+            }
+        }
+        catch (HttpRequestException e)
+        {
+            throw new Exception();
         }
         
 

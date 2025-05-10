@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Teammato.Pages.GamePickerPage">
+    <ContentPage.Content>
+        <Grid RowDefinitions="*" Padding="10">
+            
+            <Grid RowDefinitions="*, Auto" Grid.Row="0">
+                <StackLayout Grid.Row="0">
+                    <Frame CornerRadius="12" Padding="0" IsClippedToBounds="True">
+                        <Image Aspect="AspectFill" Source="{Binding SelectedGameSession.Image}" HeightRequest="400"/>
+                    </Frame>
+                    <Label FontAttributes="Bold" Text="{Binding SelectedGameSession.GameName}" Style="{DynamicResource Title}" Margin="0,10,0,0"/>
+                    <Label FontAttributes="Bold">
+                        <Label.Text>
+                            <MultiBinding StringFormat="{}{0} out of {1}">
+                                <Binding Path="SelectedGameSession.Participants.Count"/>
+                                <Binding Path="SelectedGameSession.RequiredPlayersCount"/>
+                                
+                            </MultiBinding>
+                        </Label.Text>
+                    </Label>
+                    <Label Text="{Binding SelectedGameSession.Duration, StringFormat='{}~{0} hours'}" />
+                    <Label Text="{Binding SelectedGameSession.Description}"/>
+                    
+                </StackLayout>
+                <StackLayout Grid.Row="1">
+                    <Button Text="Join"/>
+                    <Grid ColumnDefinitions="*,*,*" Margin="0,10,0,0">
+                        <Button Text="Back" Command="{Binding BackCommand}" Grid.Column="0"/>
+                        <StackLayout Grid.Column="1"/>
+                        <Button Text="Next" Command="{Binding NextCommand}"  Grid.Column="2"/>
+                    </Grid>
+                </StackLayout>
+            </Grid>
+            
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

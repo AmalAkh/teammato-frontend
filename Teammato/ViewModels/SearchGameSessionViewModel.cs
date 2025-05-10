@@ -2,7 +2,8 @@ using System.Collections.ObjectModel;
 
 using System.Windows.Input;
 using Teammato.Abstractions;
-
+using Teammato.Pages;
+using Teammato.Services;
 
 
 namespace Teammato.ViewModels;
@@ -91,6 +92,7 @@ public class SearchGameSessionViewModel : BaseViewModel
     
     
     public  ICommand AddLanguageCommand { get; protected set; }
+    public  ICommand SearchCommand { get; protected set; }
     
     public ObservableCollection<LanguageViewModel> Languages { get; set; }
     public ObservableCollection<GameViewModel> Games { get; set; }
@@ -101,6 +103,7 @@ public class SearchGameSessionViewModel : BaseViewModel
         _games = App.LocalProfileViewModel.FavoriteGames;
         Languages = new ObservableCollection<LanguageViewModel>();
         Games = new ObservableCollection<GameViewModel>();
+        SearchCommand = new Command(StartGameSearch);
         foreach (var language in _languages)
         {
             Languages.Add(new LanguageViewModel(language));
@@ -125,9 +128,51 @@ public class SearchGameSessionViewModel : BaseViewModel
                 Games.Add(new GameViewModel(game));
             }
         };
+        
     }
     
-    
+    private async void StartGameSearch()
+    {
+        List<string> gameIds = new List<string>();
+        foreach (var game in Games)
+        {
+            if (game.IsSelected)
+            {
+                gameIds.Add(game.GameID);
+            }
+        }
+        List<string> langs = new List<string>();
+        foreach (var lang in Languages)
+        {
+            if (lang.IsSelected)
+            {
+                langs.Add(lang.ISOName);
+            }
+        }
+        var config = new GameSessionSearchConfig()
+        {
+            GameIds = gameIds,
+            Languages = langs,
+            DurationFrom = durationFrom,
+            DurationTo = DurationTo,
+            PlayersCount = TeammatesCount,
+            Nearest = Nearest
+        };
+        if (Nearest)
+        {
+            var location = await Geolocation.GetLocationAsync();
+            config.Latitude = location.Latitude;
+            config.Longitude = location.Longitude;
+            
+
+        }
+        
+
+        
+        var gameSessions = await RestAPIService.GetGameSessions(config);
+        await Shell.Current.Navigation.PushAsync(new GamePickerPage(gameSessions));
+
+    }
     
 
     

@@ -26,9 +26,62 @@ public class GameSessionViewModel : BaseViewModel
                 
             }
             
+        }
+        
+    }
+    public int RequiredPlayersCount
+    {
+        get
+        {
+            return GameSession.RequiredPlayersCount;
+        }
+        set
+        {
+            if (value != GameSession.RequiredPlayersCount)
+            {
+                GameSession.RequiredPlayersCount = value;
+                OnPropertyChanged("RequiredPlayersCount");
+                
+            }
             
         }
         
+    }
+    public int Duration
+    {
+        get
+        {
+            return GameSession.Duration;
+        }
+        set
+        {
+            if (value != GameSession.Duration)
+            {
+                GameSession.Duration = value;
+                OnPropertyChanged("Duration");
+                
+            }
+            
+        }
+        
+    }
+
+    public string Image
+    {
+        get
+        {
+            return GameSession.Image;   
+        }
+        set
+        {
+            if (value != GameSession.Image)
+            {
+                GameSession.GameName = value;
+                OnPropertyChanged("GameName");
+                
+            }
+            
+        }
     }
     public ICommand CancelCommand { get; private set; }
 
