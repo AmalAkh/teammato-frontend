@@ -14,11 +14,13 @@
         <StackLayout Padding="30"
                      Spacing="10">
             <Label Text="Sign Up"
+                   SemanticProperties.Description="Sign Up"
                    FontSize="24"
                    FontAttributes="Bold"
                    HorizontalOptions="Center"/>
             
             <controls:CustomEntry Placeholder="Nickname" 
+                                  SemanticProperties.Description="Nickname"
                                   Text="{Binding Nickname, Mode=OneWayToSource}" 
                                   Margin="4"/>
             <Frame BorderColor="DarkRed"  
@@ -35,10 +37,12 @@
                                 Glyph="&#xf06a;"/>
                         </Image.Source>
                     </Image>
-                    <Label HorizontalOptions="Fill" Text="Please enter a nickname."/>
+                    <Label HorizontalOptions="Fill" Text="Please enter a nickname."
+                           SemanticProperties.Description="Please enter a nickname"/>
                 </StackLayout>
             </Frame>
             <controls:CustomEntry Placeholder="E-mail" 
+                                  SemanticProperties.Description="E-mail"
                                   Text="{Binding Email, Mode=OneWayToSource}" 
                                   Margin="4"/>
             <Frame BorderColor="DarkRed"  
@@ -55,7 +59,8 @@
                                 Glyph="&#xf06a;"/>
                         </Image.Source>
                     </Image>
-                    <Label HorizontalOptions="Fill" Text="Please enter an e-mail."/>
+                    <Label HorizontalOptions="Fill" Text="Please enter an e-mail."
+                           SemanticProperties.Description="Please enter an e-mail"/>
                 </StackLayout>
             </Frame>
             <Frame BorderColor="DarkRed"  
@@ -72,10 +77,12 @@
                                 Glyph="&#xf06a;"/>
                         </Image.Source>
                     </Image>
-                    <Label HorizontalOptions="Fill" Text="Wrong e-mail format."/>
+                    <Label HorizontalOptions="Fill" Text="Wrong e-mail format."
+                           SemanticProperties.Description="Wrong e-mail format"/>
                 </StackLayout>
             </Frame>
             <controls:CustomEntry Placeholder="Password" 
+                                  SemanticProperties.Description="Password"
                                   Text="{Binding Password, Mode=OneWayToSource}"
                                   IsPassword="True" 
                                   Margin="4"/>
@@ -93,10 +100,12 @@
                                 Glyph="&#xf06a;"/>
                         </Image.Source>
                     </Image>
-                    <Label HorizontalOptions="Fill" Text="Please enter a password."/>
+                    <Label HorizontalOptions="Fill" Text="Please enter a password."
+                           SemanticProperties.Description="Please enter a password"/>
                 </StackLayout>
             </Frame>
             <controls:CustomEntry Placeholder="RepeatPassword" 
+                                  SemanticProperties.Description="Please enter a password"
                                   Text="{Binding RepeatPassword, Mode=OneWayToSource}"
                                   IsPassword="True" 
                                   Margin="4"/>
@@ -114,15 +123,18 @@
                                 Glyph="&#xf06a;"/>
                         </Image.Source>
                     </Image>
-                    <Label HorizontalOptions="Fill" Text="Passwords do not match."/>
+                    <Label HorizontalOptions="Fill" Text="Passwords do not match."
+                           SemanticProperties.Description="Passwords do not match"/>
                 </StackLayout>
             </Frame>
             
             <Button Text="Create Account"
+                    SemanticProperties.Description="Create Account"
                     Command="{Binding SignUpCommand}"
                     Margin="4"/>
             
             <Button Text="Back"
+                    SemanticProperties.Description="Back"
                     Command="{Binding SignInCommand}"
                     Margin="4"/>
             

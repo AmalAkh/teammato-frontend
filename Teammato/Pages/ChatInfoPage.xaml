@@ -15,10 +15,13 @@
     <ContentPage.Content>
         <StackLayout Padding="10">
             <Frame Margin="20,0,0,10" CornerRadius="16" IsClippedToBounds="True" Grid.Column="0"  WidthRequest="160"  HeightRequest="180">
-                <Image Aspect="AspectFill"  WidthRequest="160"  HeightRequest="180" Source="{Binding Image}"  Grid.Column="0" BackgroundColor="Gray"/>
+                <Image Aspect="AspectFill"  WidthRequest="160"  HeightRequest="180" Source="{Binding Image}"  Grid.Column="0" BackgroundColor="Gray"
+                       SemanticProperties.Description="Chat image"/>
             </Frame>
-            <Button Text="Remove chat" Command="{Binding RemoveChatCommand}"/>
-            <Label Text="Participants" Style="{DynamicResource Title}"/>
+            <Button Text="Remove chat" Command="{Binding RemoveChatCommand}"
+                    SemanticProperties.Description="Remove chat"/>
+            <Label Text="Participants" Style="{DynamicResource Title}"
+                   SemanticProperties.Description="Participants"/>
             <CollectionView x:Name="ChatsView" Grid.Column="0"  ItemsSource="{Binding Participants}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
@@ -26,9 +29,11 @@
                                 
                                 
                                 <Frame Margin="20,0,0,0" CornerRadius="32" IsClippedToBounds="True" WidthRequest="40"  Grid.Column="0" HeightRequest="40">
-                                    <Image Aspect="AspectFill" WidthRequest="40" Source="{Binding Image, Converter={StaticResource ImageUrlConverter}}"  Grid.Column="0" HeightRequest="40" BackgroundColor="Gray"/>
+                                    <Image Aspect="AspectFill" WidthRequest="40" Source="{Binding Image, Converter={StaticResource ImageUrlConverter}}"  Grid.Column="0" HeightRequest="40" BackgroundColor="Gray"
+                                           SemanticProperties.Description="Profile image"/>
                                 </Frame>
-                                <Label Margin="10,0,0,0" VerticalTextAlignment="Center" Grid.Column="1" Style="{DynamicResource Title}" Text="{Binding NickName}"/>
+                                <Label Margin="10,0,0,0" VerticalTextAlignment="Center" Grid.Column="1" Style="{DynamicResource Title}" Text="{Binding NickName}"
+                                       SemanticProperties.Description="{Binding NickName}"/>
                             </Grid>
                                     
                         </DataTemplate>

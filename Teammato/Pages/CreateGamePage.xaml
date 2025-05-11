@@ -12,41 +12,53 @@
         <ContentPage.Content>
         <ScrollView>
             <StackLayout Padding="10">
-                <Label  Text="Game" FontAttributes="Bold" FontSize="18"/>
+                <Label  Text="Game" FontAttributes="Bold" FontSize="18"
+                        SemanticProperties.Description="Game"/>
                 <Grid Margin="0,10,0,0" ColumnDefinitions=" *">
                     
-                    <controls:CustomPicker SelectedItem="{Binding TargetGame, Mode=TwoWay}" ItemsSource="{Binding Games}"/>
+                    <controls:CustomPicker SelectedItem="{Binding TargetGame, Mode=TwoWay}" ItemsSource="{Binding Games}"
+                                           SemanticProperties.Description="Game selector"/>
                 </Grid>
-                <Label Margin="0,10,0,0" Text="Languages" FontAttributes="Bold" FontSize="18"/>
+                <Label Margin="0,10,0,0" Text="Languages" FontAttributes="Bold" FontSize="18"
+                       SemanticProperties.Description="Language selector"/>
                 <CollectionView Margin="0,10,0,0" ItemsSource="{Binding Languages}">
                         
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Grid ColumnDefinitions="*,9*" Padding="4,10,10,10">
                                     
-                                <CheckBox Grid.Column="0" IsChecked="{Binding IsSelected, Mode=TwoWay }" >
+                                <CheckBox Grid.Column="0" IsChecked="{Binding IsSelected, Mode=TwoWay }" SemanticProperties.Description="Language checkbox">
                                         
                                 </CheckBox>
-                                <Label FontAttributes="Bold" FontSize="16" Grid.Column="1" VerticalTextAlignment="Center" Text="{Binding Name}" VerticalOptions="Center"/>
+                                <Label FontAttributes="Bold" FontSize="16" Grid.Column="1" VerticalTextAlignment="Center" Text="{Binding Name}" VerticalOptions="Center"
+                                       SemanticProperties.Description="{Binding Name}"/>
                             </Grid>     
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                         
                 </CollectionView>
                 <Grid Margin="0,10,0,0" ColumnDefinitions="4*, *">
-                    <Label Text="Teammates" FontAttributes="Bold" VerticalTextAlignment="Center"/>
-                    <controls:CustomEntry Grid.Column="1" ReturnType="Done" Text="{Binding TeammatesCount, Mode=TwoWay}"  Keyboard="Numeric"  />
+                    <Label Text="Teammates" FontAttributes="Bold" VerticalTextAlignment="Center"
+                           SemanticProperties.Description="Teammates"/>
+                    <controls:CustomEntry Grid.Column="1" ReturnType="Done" Text="{Binding TeammatesCount, Mode=TwoWay}"  Keyboard="Numeric"  
+                                          SemanticProperties.Description="{Binding TeammatesCount}"/>
                 </Grid>
                 <Grid Margin="0,10,0,0" ColumnDefinitions="4*, *">
-                    <Label Text="Duration" FontAttributes="Bold" VerticalTextAlignment="Center"/>
-                    <controls:CustomEntry Grid.Column="1" ReturnType="Done" Text="{Binding Duration, Mode=TwoWay}"  Keyboard="Numeric"  />
+                    <Label Text="Duration" FontAttributes="Bold" VerticalTextAlignment="Center"
+                           SemanticProperties.Description="Duration"/>
+                    <controls:CustomEntry Grid.Column="1" ReturnType="Done" Text="{Binding Duration, Mode=TwoWay}"  Keyboard="Numeric"  
+                                          SemanticProperties.Description="{Binding Duration}"/>
                 </Grid>
                 <Grid ColumnDefinitions="100*, *">
-                    <Label Text="Find the nearest to you" VerticalTextAlignment="Center" FontAttributes="Bold"/>
-                    <Switch IsToggled="{Binding Nearest, Mode=TwoWay}"/>
+                    <Label Text="Find the nearest to you" VerticalTextAlignment="Center" FontAttributes="Bold"
+                           SemanticProperties.Description="Find the nearest to you"/>
+                    <Switch IsToggled="{Binding Nearest, Mode=TwoWay}"
+                            SemanticProperties.Description="{Binding Nearest}"/>
                 </Grid>
-                <controls:CustomEditor Placeholder="Description" Margin="0,10,0,0" HeightRequest="150" />
-                <Button Command="{Binding CreateGameCommand}" Text="Create game" Margin="0,10,0,0"/>
+                <controls:CustomEditor Placeholder="Description" Margin="0,10,0,0" HeightRequest="150" 
+                                       SemanticProperties.Description="Description"/>
+                <Button Command="{Binding CreateGameCommand}" Text="Create game" Margin="0,10,0,0"
+                        SemanticProperties.Description="Create game"/>
             </StackLayout>
             
         </ScrollView>

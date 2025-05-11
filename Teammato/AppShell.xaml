@@ -9,8 +9,8 @@
     Title="Teammato">
 
     <TabBar>
-        <Tab Title="Find" Route="find">
-            <Tab.Icon>
+        <Tab Title="Find" Route="find" SemanticProperties.Description="Find">
+            <Tab.Icon >
                 <FontImageSource
                     Glyph="&#xf11b;"  
                     FontFamily="FontAwesomeSolid"
@@ -19,7 +19,7 @@
             </Tab.Icon>
             <ShellContent Title="Play" ContentTemplate="{DataTemplate pages:FindPage}"/>
         </Tab>
-        <Tab Title="Chats" Route="chats">
+        <Tab Title="Chats" Route="chats" SemanticProperties.Description="Chats">
             <Tab.Icon>
                 <FontImageSource
                     Glyph="&#xf075;"  
@@ -29,7 +29,7 @@
             </Tab.Icon>
             <ShellContent Title="Chats" ContentTemplate="{DataTemplate pages:ChatsPage}"/>
         </Tab>
-        <Tab Title="Profile">
+        <Tab Title="Profile" SemanticProperties.Description="Profile">
             <Tab.Icon>
                 <FontImageSource
                     Glyph="&#xf007;"  
@@ -39,7 +39,7 @@
             </Tab.Icon>
             <ShellContent Title="Profile" ContentTemplate="{DataTemplate pages:ProfilePage}"/>
         </Tab>
-        <Tab Title="Settings">
+        <Tab Title="Settings" SemanticProperties.Description="Settings">
             <Tab.Icon>
                 <FontImageSource
                     Glyph="&#xf013;"  

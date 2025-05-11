@@ -8,6 +8,7 @@
     <Shell.TitleView>
         <Grid>
             <Label Text="Play"
+                   SemanticProperties.Description="Play"
                    HorizontalOptions="Center"
                    VerticalOptions="Center"
                    Style="{DynamicResource Title}"
@@ -19,60 +20,78 @@
             
             <ScrollView Grid.Row="0" FlexLayout.Basis="92%">
                 <StackLayout Padding="10">
-                    <Label Text="Games" FontAttributes="Bold" Style="{DynamicResource Title}"/>
+                    <Label Text="Games" FontAttributes="Bold" Style="{DynamicResource Title}"
+                           SemanticProperties.Description="Games"/>
                     <CollectionView ItemsSource="{Binding Games}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
                                 <Grid ColumnDefinitions="*,9*" Padding="4,10,10,10">
                                     
-                                    <CheckBox Grid.Column="0" IsChecked="{Binding IsSelected, Mode=TwoWay }" >
+                                    <CheckBox Grid.Column="0" IsChecked="{Binding IsSelected, Mode=TwoWay }" 
+                                              SemanticProperties.Description="{Binding IsSelected}">
                                         
                                     </CheckBox>
-                                    <Label FontAttributes="Bold" Grid.Column="1" VerticalTextAlignment="Center" Text="{Binding Name}" VerticalOptions="Center"/>
+                                    <Label FontAttributes="Bold" Grid.Column="1" VerticalTextAlignment="Center" Text="{Binding Name}" VerticalOptions="Center"
+                                           SemanticProperties.Description="{Binding Name}"/>
                                 </Grid>     
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
-                    <Label Text="Languages"  Style="{DynamicResource Title}"/>
+                    <Label Text="Languages"  Style="{DynamicResource Title}"
+                           SemanticProperties.Description="Languages"/>
                     <CollectionView ItemsSource="{Binding Languages}">
                         
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
                                 <Grid ColumnDefinitions="*,9*" Padding="4,10,10,10">
                                     
-                                    <CheckBox Grid.Column="0" IsChecked="{Binding IsSelected, Mode=TwoWay }" >
+                                    <CheckBox Grid.Column="0" IsChecked="{Binding IsSelected, Mode=TwoWay }" 
+                                              SemanticProperties.Description="{Binding IsSelected}">
                                         
                                     </CheckBox>
-                                    <Label FontAttributes="Bold" Grid.Column="1" VerticalTextAlignment="Center" Text="{Binding Name}" VerticalOptions="Center"/>
+                                    <Label FontAttributes="Bold" Grid.Column="1" VerticalTextAlignment="Center" Text="{Binding Name}" VerticalOptions="Center"
+                                           SemanticProperties.Description="{Binding Name}"/>
                                 </Grid>     
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                         
                     </CollectionView>
                     <Grid ColumnDefinitions="4*, *">
-                        <Label Text="Teammates" FontAttributes="Bold" VerticalTextAlignment="Center"/>
-                        <controls:CustomEntry Grid.Column="1" ReturnType="Done" Text="{Binding TeammatesCount, Mode=TwoWay}"  Keyboard="Numeric"  />
+                        <Label Text="Teammates" FontAttributes="Bold" VerticalTextAlignment="Center"
+                               SemanticProperties.Description="Teammates"/>
+                        <controls:CustomEntry Grid.Column="1" ReturnType="Done" Text="{Binding TeammatesCount, Mode=TwoWay}"  Keyboard="Numeric"  
+                                              SemanticProperties.Description="{Binding TeammatesCount}"/>
                     </Grid>
-                    <Label Text="Duration" Style="{DynamicResource Title}"/>
+                    <Label Text="Duration" Style="{DynamicResource Title}"
+                           SemanticProperties.Description="Duration"/>
                     <Grid Margin="0,10,0,0" ColumnDefinitions="*,*,*, *, *">
                         
-                        <Label Text="From" Grid.Column="0" VerticalTextAlignment="Center"/>
+                        <Label Text="From" Grid.Column="0" VerticalTextAlignment="Center"
+                               SemanticProperties.Description="From"/>
                         
-                        <controls:CustomEntry MaximumHeightRequest="50" VerticalTextAlignment="Center" Text="{Binding DurationFrom, Mode=TwoWay}" Grid.Column="1" ReturnType="Done"  Keyboard="Numeric"  />
-                        <Label HorizontalTextAlignment="Center" Text="To" Grid.Column="2" VerticalTextAlignment="Center"/>
-                        <controls:CustomEntry MaximumHeightRequest="50" VerticalTextAlignment="Center" Text="{Binding DurationTo, Mode=TwoWay}" Grid.Column="3" ReturnType="Done"  Keyboard="Numeric"  />
-                        <Label HorizontalTextAlignment="Center" Text="(Hours)" Grid.Column="4" VerticalTextAlignment="Center"/>
+                        <controls:CustomEntry MaximumHeightRequest="50" VerticalTextAlignment="Center" Text="{Binding DurationFrom, Mode=TwoWay}" Grid.Column="1" ReturnType="Done"  Keyboard="Numeric"  
+                                              SemanticProperties.Description="{Binding DurationFrom}"/>
+                        <Label HorizontalTextAlignment="Center" Text="To" Grid.Column="2" VerticalTextAlignment="Center"
+                               SemanticProperties.Description="To"/>
+                        <controls:CustomEntry MaximumHeightRequest="50" VerticalTextAlignment="Center" Text="{Binding DurationTo, Mode=TwoWay}" Grid.Column="3" ReturnType="Done"  Keyboard="Numeric"  
+                                              SemanticProperties.Description="{Binding DurationTo}"/>
+                        <Label HorizontalTextAlignment="Center" Text="(Hours)" Grid.Column="4" VerticalTextAlignment="Center"
+                               SemanticProperties.Description="(Hours)"/>
                     </Grid>
                     <Grid ColumnDefinitions="100*, *">
-                        <Label Text="Find the nearest to you" VerticalTextAlignment="Center" FontAttributes="Bold"/>
-                        <Switch IsToggled="{Binding Nearest, Mode=TwoWay}"/>
+                        <Label Text="Find the nearest to you" VerticalTextAlignment="Center" FontAttributes="Bold"
+                               SemanticProperties.Description="Find the nearest to you"/>
+                        <Switch IsToggled="{Binding Nearest, Mode=TwoWay}"
+                                SemanticProperties.Description="{Binding Nearest}"/>
                     </Grid>
                 </StackLayout>
                 
             </ScrollView>
             <FlexLayout Grid.Row="1" >
-                <Button Command="{Binding SearchCommand}" Margin="2" Text="Search" FlexLayout.Basis="50%"/>
-                <Button Margin="2" Clicked="CreateGameButton_OnClicked" Text="Create a game" FlexLayout.Basis="50%"/>
+                <Button Command="{Binding SearchCommand}" Margin="2" Text="Search" FlexLayout.Basis="50%"
+                        SemanticProperties.Description="Search"/>
+                <Button Margin="2" Clicked="CreateGameButton_OnClicked" Text="Create a game" FlexLayout.Basis="50%"
+                        SemanticProperties.Description="Create a game"/>
             </FlexLayout>
         </Grid>
     </ContentPage.Content>

@@ -17,10 +17,12 @@
                 
                 <controls:CustomEntry Placeholder="E-mail or nickname" 
                                       Text="{Binding Login, Mode=OneWayToSource}"  
-                                      Margin="4"/>
+                                      Margin="4"
+                                      SemanticProperties.Description="E-mail or nickname"/>
                 <controls:CustomEntry Placeholder="Password" 
                                       Text="{Binding Password, Mode=OneWayToSource}"
-                                      IsPassword="True" Margin="4"/>
+                                      IsPassword="True" Margin="4"
+                                      SemanticProperties.Description="Password"/>
                 <Frame BorderColor="DarkRed"  
                        Margin="4"
                        Padding="4"
@@ -35,13 +37,16 @@
                                     Glyph="&#xf06a;"/>
                             </Image.Source>
                         </Image>
-                        <Label HorizontalOptions="Fill" Text="Incorrect login or password"/>
+                        <Label HorizontalOptions="Fill" Text="Incorrect login or password"
+                               SemanticProperties.Description="Incorrect login or password"/>
                     </StackLayout>
                     
                 </Frame>
-                <Button Text="Sign In" Margin="4,6,4,1" Command="{Binding SignInCommand}"/>
+                <Button Text="Sign In" Margin="4,6,4,1" Command="{Binding SignInCommand}"
+                        SemanticProperties.Description="Sign In"/>
                 <Button Text="Sign Up" Margin="4,1,4,2"
-                        Command="{Binding SignUpCommand}"/>
+                        Command="{Binding SignUpCommand}"
+                        SemanticProperties.Description="Sign Up"/>
                 
             </StackLayout>
                

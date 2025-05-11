@@ -11,13 +11,15 @@
 
     <VerticalStackLayout Padding="20" Spacing="10">
         <Entry Placeholder="Enter game name"
+               SemanticProperties.Description="Enter game name"
                Text="{Binding SearchText, Mode=TwoWay}" />
         
         <CollectionView ItemsSource="{Binding SearchResults}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Frame>
-                        <Label Text="{Binding Name}">
+                        <Label Text="{Binding Name}"
+                               SemanticProperties.Description="{Binding Name}">
                             <Label.GestureRecognizers>
                                 <TapGestureRecognizer
                                     Command="{Binding BindingContext.GameSelectedCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
