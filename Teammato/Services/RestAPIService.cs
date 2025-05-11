@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Akavache;
+using Firebase.Analytics;
 using Microsoft.Maui.Networking;
 using Microsoft.Maui.Storage;
 using OneSignalSDK.DotNet;
@@ -69,6 +70,11 @@ public class RestAPIService
         if (signup_response.IsSuccessStatusCode)
         {
             var signin_response = await SignIn(email, password);
+            var analyticsService = new AnalyticsService();
+            analyticsService?.LogEvent(FirebaseAnalytics.Event.SignUp, new Dictionary<string, string>
+            {
+                { "timestamp", DateTime.UtcNow.ToString() }
+            });
             return signin_response;
         }
         return false;
@@ -91,6 +97,11 @@ public class RestAPIService
             _refreshToken = await response.Content.ReadAsStringAsync();
             await SecureStorage.Default.SetAsync("refresh_token", _refreshToken);
             await UpdateAccessToken();
+            var analyticsService = new AnalyticsService();
+            analyticsService?.LogEvent(FirebaseAnalytics.Event.Login , new Dictionary<string, string>
+            {
+                { "timestamp", DateTime.UtcNow.ToString() }
+            });
             IsLoggedIn = true;
             
             return true;
@@ -502,6 +513,8 @@ public class RestAPIService
             StorageService.CurrentUser = await GetUser();
             OneSignal.User.AddTag("UserId", StorageService.CurrentUser.Id);
             await WebSocketService.ConnectAsync(new Uri(new Uri(BaseAddress.Replace("http", "ws")),"ws"));
+            Firebase.Analytics.FirebaseAnalytics.GetInstance(Android.App.Application.Context)
+                .SetUserProperty("user_id",StorageService.CurrentUser.Id);
         }
         catch (FailedAccessTokenRequestException e)
         {
@@ -643,7 +656,12 @@ public class RestAPIService
         if (response.IsSuccessStatusCode)
         {
             var content = await response.Content.ReadAsStreamAsync();
+            var analyticsService = new AnalyticsService();
            
+            analyticsService?.LogEvent("game_session_created" , new Dictionary<string, string>
+            {
+                { "timestamp", DateTime.UtcNow.ToString() }
+            });
             return JsonSerializer.Deserialize<GameSession>(content);
         }else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
         {
@@ -666,7 +684,12 @@ public class RestAPIService
         if (response.IsSuccessStatusCode)
         {
             var content = await response.Content.ReadAsStringAsync();
-
+            var analyticsService = new AnalyticsService();
+           
+            analyticsService?.LogEvent("game_session_started" , new Dictionary<string, string>
+            {
+                { "timestamp", DateTime.UtcNow.ToString() }
+            });
             return content;
         }else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
         {

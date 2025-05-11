@@ -123,13 +123,16 @@ public partial class App : Application
         AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
         TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
 
+        
         var analyticsService = new AnalyticsService();
-
         // Log a custom event when the app starts
         analyticsService?.LogEvent(FirebaseAnalytics.Event.AppOpen, new Dictionary<string, string>
         {
-          
+            { "timestamp", DateTime.UtcNow.ToString() }
         });
+        
+        
+        
 
     }
     private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)

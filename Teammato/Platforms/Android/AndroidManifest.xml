@@ -4,13 +4,7 @@
 				 android:usesCleartextTraffic="true"
 				 android:icon="@mipmap/appicon" android:roundIcon="@mipmap/appicon_round" android:supportsRtl="true">
 
-		<service
-				android:name="com.google.firebase.components.ComponentDiscoveryService"
-				android:exported="false">
-			<meta-data
-					android:name="com.google.firebase.components:com.google.firebase.analytics.connector.internal.AnalyticsConnectorRegistrar"
-					android:value="com.google.firebase.components.ComponentRegistrar" />
-		</service>
+		
 	</application>
 	
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
