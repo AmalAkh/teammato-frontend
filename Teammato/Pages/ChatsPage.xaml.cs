@@ -18,6 +18,13 @@ public partial class ChatsPage : ContentPage
         InitializeComponent();
         OrientationChanged(this, System.EventArgs.Empty);
         DeviceDisplay.MainDisplayInfoChanged += OrientationChanged;
+        MessageCollectionView.SizeChanged += (s, e) =>
+        {
+            if ( MessageCollectionView.Height > 0)
+            {
+                TopMessangerSpace.HeightRequest = MessageCollectionView.Height * 0.9;
+            }
+        };
     }
 
     public void OrientationChanged(Object sender, System.EventArgs e)
