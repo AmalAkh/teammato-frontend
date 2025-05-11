@@ -100,7 +100,18 @@ public class ChatViewModel : BaseViewModel
         SelectChatCommand = new Command(async() =>
         {
             _chatsViewModel.SelectedChat = this;
-            await Shell.Current.Navigation.PushAsync(new ChatPage(this));
+            if (DeviceInfo.Idiom != DeviceIdiom.Tablet ||(DeviceInfo.Idiom == DeviceIdiom.Tablet && DeviceDisplay.MainDisplayInfo.Orientation == DisplayOrientation.Portrait))
+            {
+                await Shell.Current.Navigation.PushAsync(new ChatPage(this));    
+            }
+            else
+            {
+                Task.Run(async()=>
+                { 
+                    await LoadMessages();
+                });
+            }
+            
             
         });
         AddMessageCommand = new Command(SendMessage);

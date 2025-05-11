@@ -14,8 +14,22 @@ public class ChatsViewModel : BaseViewModel
 {
     public ObservableCollection<ChatViewModel> Chats { private set; get; }
 
-
-    public ChatViewModel SelectedChat { get; set; }
+    private ChatViewModel _selectedChat;
+    public ChatViewModel SelectedChat
+    {
+        get
+        {
+            return _selectedChat;
+        }
+        set
+        {
+            if (value != _selectedChat)
+            {
+                _selectedChat = value;
+                OnPropertyChanged(nameof(SelectedChat));
+            }
+        }
+    }
    
     public ChatsViewModel()
     {

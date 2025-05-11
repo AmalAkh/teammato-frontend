@@ -136,10 +136,11 @@ public class CreateGameSessionViewModel : BaseViewModel
         {
             GameId = TargetGame.Game.GameID,
             PlayersCount = TeammatesCount,
-            Duration = Duration,
+            Duration = Duration
             
             
         };
+        
         foreach (var language in Languages)
         {
             if (language.IsSelected)
