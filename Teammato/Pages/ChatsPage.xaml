@@ -53,8 +53,8 @@
                                         <Label MaxLines="1"  Margin="10,0,0,0">
                                             <Label.Text>
                                                 <MultiBinding StringFormat="{}{1}: {0}">
-                                                    <Binding Path="LastMessage.Content" SemanticProperties.Description="{Binding LastMessage.Content}"/>
-                                                    <Binding Path="LastMessage.Sender.NickName" SemanticProperties.Description="{Binding LastMessage.Sender.NickName}"/>
+                                                    <Binding Path="LastMessage.Content" />
+                                                    <Binding Path="LastMessage.Sender.NickName"/>
                                                 </MultiBinding>
                                             </Label.Text>
                                         </Label>
