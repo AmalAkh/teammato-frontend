@@ -82,6 +82,20 @@ public class ChatViewModel : BaseViewModel
             }
         }
     }
+
+    private bool _isOwned = false;
+    public bool IsOwned
+    {
+        get => _isOwned;
+        set
+        {
+            if (_isOwned != value)
+            {
+                _isOwned = value;
+                OnPropertyChanged("IsOwned");
+            }
+        }
+    }
     public ObservableCollection<Message> Messages { get;private set;  }
     public ObservableCollection<User> Participants { get;private set;  }
     private ChatsViewModel _chatsViewModel;
@@ -97,7 +111,7 @@ public class ChatViewModel : BaseViewModel
         this._chatsViewModel = chatsViewModel;
         Participants = new ObservableCollection<User>(chat.Participants);
         Messages = new ObservableCollection<Message>();
-        
+        IsOwned = chat.Owner.Id == StorageService.CurrentUser.Id;
         
         SelectChatCommand = new Command(async() =>
         {

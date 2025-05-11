@@ -18,7 +18,7 @@
                 <Image Aspect="AspectFill"  WidthRequest="160"  HeightRequest="180" Source="{Binding Image}"  Grid.Column="0" BackgroundColor="Gray"
                        SemanticProperties.Description="Chat image"/>
             </Frame>
-            <Button Text="Remove chat" Command="{Binding RemoveChatCommand}"
+            <Button IsVisible="{Binding IsOwned}" Text="Remove chat" Command="{Binding RemoveChatCommand}"
                     SemanticProperties.Description="Remove chat"/>
             <Label Text="Participants" Style="{DynamicResource Title}"
                    SemanticProperties.Description="Participants"/>

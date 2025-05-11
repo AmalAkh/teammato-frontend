@@ -11,6 +11,10 @@ public class Chat
     // The unique identifier for the chat.
     public string ?Id{get;set;}
     
+    [JsonPropertyName("owner")]
+    // The unique identifier for the chat.
+    public User Owner{get;set;}
+    
     [JsonPropertyName("lastMessage")]
     public Message? LastMessage{get;set;}
         
