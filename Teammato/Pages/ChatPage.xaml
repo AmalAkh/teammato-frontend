@@ -74,7 +74,7 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                    <controls:CustomEntry Grid.Column="0" Placeholder="Message..."  Text="{Binding MessageText}" 
+                    <controls:CustomEntry x:Name="MessageEntry" ReturnType="Send"  ReturnCommand="{Binding AddMessageCommand }" Grid.Column="0" Placeholder="Message..."  Text="{Binding MessageText}" 
                                           Focused="MessageTextEntry_OnFocused" SemanticProperties.Description="Type your message here"/>
                     <ImageButton Grid.Column="1" Padding="10"  Command="{Binding AddMessageCommand}" SemanticProperties.Description="Send message button">
                         <ImageButton.Source>

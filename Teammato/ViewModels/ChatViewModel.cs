@@ -155,7 +155,10 @@ public class ChatViewModel : BaseViewModel
     {
         
         //Messages.Add(new Message (MessageText, StorageService.CurrentUser));
-        await RestAPIService.SendMessage(MessageText, Id);
+        if (await RestAPIService.SendMessage(MessageText, Id))
+        {
+            UnfocusEntryRequested?.Invoke();
+        }
         MessageText = "";
     }
 
@@ -172,6 +175,7 @@ public class ChatViewModel : BaseViewModel
 
         
     }
+    public event Action UnfocusEntryRequested;
 
     public async void GoBack()
     {

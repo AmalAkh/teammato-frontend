@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Android.Content;
+using Android.Views.InputMethods;
 using Teammato.ViewModels;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.DependencyInjection;
@@ -20,6 +22,25 @@ public partial class ChatPage : ContentPage
         {
             titleView.BindingContext = viewModel;
         }
+
+        viewModel.UnfocusEntryRequested += delegate
+        {
+            
+            var context = Platform.AppContext;
+            var inputMethodManager = context.GetSystemService(Context.InputMethodService) as InputMethodManager;
+            if (inputMethodManager != null)
+            {
+                var activity = Platform.CurrentActivity;
+                if (activity != null)
+                {
+                    var token = activity.CurrentFocus?.WindowToken;
+                    inputMethodManager.HideSoftInputFromWindow(token, HideSoftInputFlags.None);
+                }
+
+
+                if (activity?.Window != null) activity.Window.DecorView.ClearFocus();
+            }
+        };
 
        
         

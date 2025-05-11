@@ -31,7 +31,7 @@ public class RestAPIService
         private set;
     } = true;
     
-    public static async Task SendMessage(string text, string chatId)
+    public static async Task<bool> SendMessage(string text, string chatId)
     {
         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"api/messages/{chatId}/new");
         request.Headers.Add("Authorization", "Bearer " + _accessToken);
@@ -45,14 +45,17 @@ public class RestAPIService
         var response = await _client.SendAsync(request);
         if (response.IsSuccessStatusCode)
         {
-            
+            return true;
             
         }
         else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized);
         {
-            UpdateAccessToken();
+            await UpdateAccessToken();
+            await SendMessage(text, chatId);
+            return false;
         }
-      
+        return false;
+
     }
     
     public static async Task<bool> SignUp(string email, string nickname, string password)
