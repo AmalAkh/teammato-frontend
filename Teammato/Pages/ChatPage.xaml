@@ -39,6 +39,9 @@
                 
             </Grid.RowDefinitions>
             <CollectionView x:Name="MessageCollectionView" ItemsUpdatingScrollMode="KeepLastItemInView" ItemsSource="{Binding Messages}" Grid.Row="0" >
+                <CollectionView.Header>
+                    <StackLayout x:Name="TopMessangerSpace"></StackLayout>
+                </CollectionView.Header>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         

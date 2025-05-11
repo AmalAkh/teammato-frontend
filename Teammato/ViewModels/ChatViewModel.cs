@@ -158,8 +158,13 @@ public class ChatViewModel : BaseViewModel
         if (await RestAPIService.SendMessage(MessageText, Id))
         {
             UnfocusEntryRequested?.Invoke();
+            MessageText = "";
         }
-        MessageText = "";
+        else
+        {
+            await Shell.Current.DisplayAlert("Unable to send message", "", "ok");
+        }
+        
     }
 
     public async void OpenChatInfo()

@@ -23,6 +23,13 @@ public partial class ChatPage : ContentPage
             titleView.BindingContext = viewModel;
         }
 
+        MessageCollectionView.SizeChanged += (s, e) =>
+        {
+            if ( MessageCollectionView.Height > 0)
+            {
+                TopMessangerSpace.HeightRequest = MessageCollectionView.Height * 0.9;
+            }
+        };
         viewModel.UnfocusEntryRequested += delegate
         {
             
@@ -47,6 +54,9 @@ public partial class ChatPage : ContentPage
     
         LoadData();
     }
+
+  
+  
 
     public async void LoadData()
     {
