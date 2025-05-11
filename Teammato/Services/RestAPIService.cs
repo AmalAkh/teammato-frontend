@@ -511,9 +511,16 @@ public class RestAPIService
 
         if (Connectivity.NetworkAccess != NetworkAccess.Internet)
         {
-            
+            StorageService.CurrentUser = await GetUser();
             await App.Current.MainPage.DisplayAlert("No connection", "Your device is not connected to the internet ", "OK");
-            
+            Connectivity.ConnectivityChanged += async (sender, args) =>
+            {
+                if (args.NetworkAccess == NetworkAccess.Internet && WebSocketService.State != WebSocketState.Open)
+                {
+                    await UpdateAccessToken();
+                    await WebSocketService.ConnectAsync(new Uri(new Uri(BaseAddress.Replace("http", "ws")),"ws"));
+                }
+            }; 
             return;
         }
         

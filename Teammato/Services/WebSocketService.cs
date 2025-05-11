@@ -18,17 +18,8 @@ public class WebSocketService
     public static WebSocketState State => _client.State;
     public static async  Task ConnectAsync(Uri uri)
     {
-        Connectivity.ConnectivityChanged += async (sender, args) =>
-        {
-            if (args.NetworkAccess == NetworkAccess.Internet && _client.State != WebSocketState.Open)
-            {
-                await ConnectAsync(uri);
-            }
-        };
-        if (Connectivity.NetworkAccess != NetworkAccess.Internet)
-        {
-            return;
-        }
+       
+       
 
         
         var accessToken = RestAPIService.GetAccessToken();
@@ -40,12 +31,14 @@ public class WebSocketService
         {
             return;
         }
-
         await _client.SendAsync(Encoding.UTF8.GetBytes(accessToken), WebSocketMessageType.Text, true, CancellationToken.None);
         Task.Run(async ()=>
         {
-            while(_client.State == WebSocketState.Open)
+           
+            while (_client.State == WebSocketState.Open)
             {
+              
+             
                 var buffer = new byte[1024 * 4];
                 var result = await _client.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
                 var message = Encoding.UTF8.GetString(buffer, 0, result.Count);
@@ -59,9 +52,13 @@ public class WebSocketService
 
             if (_client.State == WebSocketState.Closed)
             {
+                
                 Console.WriteLine("Closed");
+
             }
             
+           
+
         });
         
         
