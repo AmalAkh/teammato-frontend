@@ -19,17 +19,17 @@
                         <Label.Text>
                             <MultiBinding StringFormat="{}{0} out of {1}">
                                 <Binding Path="SelectedGameSession.Participants.Count"
-                                         SemanticProperties.Description="{Binding SelectedGameSession.Participants.Count}"/>
+                                         />
                                 <Binding Path="SelectedGameSession.RequiredPlayersCount"
-                                         SemanticProperties.Description="{Binding SelectedGameSession.RequiredPlayersCount}"/>
+                                         />
                                 
                             </MultiBinding>
                         </Label.Text>
                     </Label>
                     <Label Text="{Binding SelectedGameSession.Duration, StringFormat='{}~{0} hours'}" 
-                           SemanticProperties.Description="{Binding SelectedGameSession.Duration}"/>
+                           />
                     <Label Text="{Binding SelectedGameSession.Description}"
-                           SemanticProperties.Description="{Binding SelectedGameSession.Description}"/>
+                           />
                     
                 </StackLayout>
                 <StackLayout Grid.Row="1">
