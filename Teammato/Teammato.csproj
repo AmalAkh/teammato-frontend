@@ -62,9 +62,17 @@
     <ItemGroup>
         <PackageReference Include="akavache" Version="10.0.1" />
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+        <PackageReference Include="FirebaseDatabase.net" Version="5.0.0" />
         <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)"/>
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0"/>
         <PackageReference Include="OneSignalSDK.DotNet" Version="5.2.1" />
+        <PackageReference Include="Xamarin.Firebase.Core" Version="121.1.1.14" />
+        <PackageReference Include="Xamarin.Firebase.Crashlytics" Version="119.4.2.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Platforms\Android\google-services.json" />
+      <GlobalAnalyzerConfigFiles Include="Platforms\Android\google-services.json" />
     </ItemGroup>
 
 </Project>

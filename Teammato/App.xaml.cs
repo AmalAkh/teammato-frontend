@@ -1,4 +1,6 @@
 ﻿using System.Text.Json;
+using Firebase;
+using Firebase.Analytics;
 using Microsoft.Maui.Platform;
 using Teammato.Controls;
 using Teammato.Pages;
@@ -8,6 +10,9 @@ using OneSignalSDK.DotNet.Core;
 using OneSignalSDK.DotNet.Core.Debug;
 using Teammato.Abstractions;
 using Teammato.ViewModels;
+using Firebase.Database;
+using Teammato.Utils;
+
 
 namespace Teammato;
 
@@ -115,8 +120,40 @@ public partial class App : Application
 
         LocalProfileViewModel = new ProfileViewModel();
         SettingsViewModel = new SettingsViewModel();
-        
+        AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+        TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
+
+        var analyticsService = new AnalyticsService();
+
+        // Log a custom event when the app starts
+        analyticsService?.LogEvent(FirebaseAnalytics.Event.AppOpen, new Dictionary<string, string>
+        {
+          
+        });
+
     }
+    private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+    {
+        
+        if (e.ExceptionObject is Exception ex)
+        {
+            HandleException(ex, "AppDomain Unhandled Exception");
+        }
+    }
+    private void TaskScheduler_UnobservedTaskException(object? sender, UnobservedTaskExceptionEventArgs e)
+    {
+        e.SetObserved(); // Prevents the application from crashing
+        HandleException(e.Exception, "TaskScheduler Unobserved Exception");
+    }
+
+    private void HandleException(Exception ex, string exceptionType)
+    {
+    //    Firebase.Crashlytics.FirebaseCrashlytics.Instance.Log($"Unhandled Exception: {ex.Message}");
+      //  Firebase.Crashlytics.FirebaseCrashlytics.Instance.Log($"Stack Trace: {ex.StackTrace}");
+       
+    }
+    private FirebaseClient _firebaseClient;
+    
     public static ProfileViewModel LocalProfileViewModel { get; set; }
     public static SettingsViewModel SettingsViewModel { get; set; }
     

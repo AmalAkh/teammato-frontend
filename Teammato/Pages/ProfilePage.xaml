@@ -16,9 +16,8 @@
         </Grid>
     </Shell.TitleView>
     
-    <ContentPage.BindingContext>
-        
-    </ContentPage.BindingContext>
+  
+    
     
     <ContentPage.Content>
         <ScrollView>

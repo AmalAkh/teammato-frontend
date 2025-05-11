@@ -1,6 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Firebase.Analytics;
+using Microsoft.Extensions.Logging;
 using Microsoft.Maui.LifecycleEvents;
-
+using Teammato.Utils;
 namespace Teammato;
 
 public static class MauiProgram
@@ -15,26 +16,22 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 fonts.AddFont("fa-solid-900.ttf", "FontAwesomeSolid");
-            }).ConfigureMauiHandlers(handlers => { /* custom handlers */ }).ConfigureLifecycleEvents(events =>
+            });
+        builder.Services.AddSingleton<IAnalyticsService, AnalyticsService>();
+      
+        builder.ConfigureLifecycleEvents(events =>
         {
 #if ANDROID
-            events.AddAndroid(android =>
+            events.AddAndroid(android => android.OnCreate((activity, bundle) =>
             {
-                /*android.OnNewIntent((activity, intent) =>
-                {
-                    if (intent?.Extras != null)
-                    {
-                        string notificationData = intent.Extras.GetString("notificationData");
-                        if (!string.IsNullOrEmpty(notificationData))
-                        {
-                            // Handle the notification tap
-                            Application.Current?.MainPage?.DisplayAlert("Notification Tapped", notificationData, "OK");
-                        }
-                    }
-                });*/
-            });
+                var app = Firebase.FirebaseApp.InitializeApp(activity);
+                var crashlytics = Firebase.Crashlytics.FirebaseCrashlytics.Instance;
+                crashlytics.SetCrashlyticsCollectionEnabled(new Java.Lang.Boolean(true));
+                FirebaseAnalytics.GetInstance(Android.App.Application.Context).SetAnalyticsCollectionEnabled(true);
+            }));
 #endif
-        });;
+        });
+        
 
 #if DEBUG
         builder.Logging.AddDebug();
