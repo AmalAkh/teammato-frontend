@@ -12,7 +12,10 @@
         </Shell.BackButtonBehavior>
         <Shell.TitleView>
         <Grid Padding="4">
-            <Grid.ColumnDefinitions>
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding OpenChatInfoCommand}"/>
+            </Grid.GestureRecognizers>
+                <Grid.ColumnDefinitions>
                 
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>

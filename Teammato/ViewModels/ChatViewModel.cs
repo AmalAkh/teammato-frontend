@@ -89,6 +89,8 @@ public class ChatViewModel : BaseViewModel
     public ICommand SelectChatCommand { get; private set; }
     public ICommand AddMessageCommand { get; private set; }
     public ICommand GoBackCommand { get; private set; }
+    public ICommand OpenChatInfoCommand { get; private set; }
+    public ICommand RemoveChatCommand { get; private set; }
     public ChatViewModel(ChatsViewModel chatsViewModel,Chat chat)
     {
         this._chat = chat;
@@ -115,8 +117,9 @@ public class ChatViewModel : BaseViewModel
             
         });
         AddMessageCommand = new Command(SendMessage);
+        OpenChatInfoCommand = new Command(OpenChatInfo);
         GoBackCommand = new Command(GoBack);
-        
+        RemoveChatCommand = new Command(RemoveChat);
     }
 
     public void AddMessage(Message message)
@@ -154,6 +157,20 @@ public class ChatViewModel : BaseViewModel
         //Messages.Add(new Message (MessageText, StorageService.CurrentUser));
         await RestAPIService.SendMessage(MessageText, Id);
         MessageText = "";
+    }
+
+    public async void OpenChatInfo()
+    {
+        await Shell.Current.Navigation.PushAsync(new ChatInfoPage(this));
+    }
+    public async void RemoveChat()
+    {
+        await RestAPIService.RemoveChat(this.Id);
+        await _chatsViewModel.LoadChats();
+        await Shell.Current.Navigation.PopAsync();
+        await Shell.Current.Navigation.PopAsync();
+
+        
     }
 
     public async void GoBack()

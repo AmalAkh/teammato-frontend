@@ -75,4 +75,17 @@
       <GlobalAnalyzerConfigFiles Include="Platforms\Android\google-services.json" />
     </ItemGroup>
 
+    <ItemGroup>
+      <MauiXaml Update="Pages\ChatInfoPage.xaml">
+        <SubType>Designer</SubType>
+      </MauiXaml>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Pages\ChatInfoPage.xaml.cs">
+        <DependentUpon>ChatInfoPage.xaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+    </ItemGroup>
+
 </Project>

@@ -698,6 +698,26 @@ public class RestAPIService
         return false;
 
     }
+    public static async Task<bool> RemoveChat(string chatId)
+    {
+        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, $"api/chats/{chatId}");
+        request.Headers.Add("Authorization", "Bearer " + _accessToken);
+        var response = await _client.SendAsync(request);
+        
+        if (response.IsSuccessStatusCode)
+        {
+           
+
+            return true;
+        }else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            await UpdateAccessToken();
+            return await CancelGame(chatId);
+        }
+
+        return false;
+
+    }
     
     
     
