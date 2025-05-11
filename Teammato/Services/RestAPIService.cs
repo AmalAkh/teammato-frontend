@@ -146,10 +146,7 @@ public class RestAPIService
             return await StorageService.GetChatsAsync();
         }
 
-        if (WebSocketService.State != WebSocketState.Open)
-        {
-            WebSocketService.ConnectAsync(new Uri(new Uri(BaseAddress.Replace("http", "ws")),"ws"));
-        }
+        
         try
         {
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "api/chats/list");
@@ -740,6 +737,7 @@ public class RestAPIService
     }
     public static async Task<bool> RemoveChat(string chatId)
     {
+        
         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, $"api/chats/{chatId}");
         request.Headers.Add("Authorization", "Bearer " + _accessToken);
         var response = await _client.SendAsync(request);

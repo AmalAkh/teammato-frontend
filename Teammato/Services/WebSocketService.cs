@@ -18,6 +18,19 @@ public class WebSocketService
     public static WebSocketState State => _client.State;
     public static async  Task ConnectAsync(Uri uri)
     {
+        Connectivity.ConnectivityChanged += async (sender, args) =>
+        {
+            if (args.NetworkAccess == NetworkAccess.Internet && _client.State != WebSocketState.Open)
+            {
+                await ConnectAsync(uri);
+            }
+        };
+        if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+        {
+            return;
+        }
+
+        
         var accessToken = RestAPIService.GetAccessToken();
         try
         {
