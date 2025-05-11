@@ -18,10 +18,8 @@
                     <Label FontAttributes="Bold">
                         <Label.Text>
                             <MultiBinding StringFormat="{}{0} out of {1}">
-                                <Binding Path="SelectedGameSession.Participants.Count"
-                                         SemanticProperties.Description="{Binding SelectedGameSession.Participants.Count}"/>
-                                <Binding Path="SelectedGameSession.RequiredPlayersCount"
-                                         SemanticProperties.Description="{Binding SelectedGameSession.RequiredPlayersCount}"/>
+                                <Binding Path="SelectedGameSession.Participants.Count"/>
+                                <Binding Path="SelectedGameSession.RequiredPlayersCount"/>
                                 
                             </MultiBinding>
                         </Label.Text>
