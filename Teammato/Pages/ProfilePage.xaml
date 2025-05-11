@@ -2,14 +2,140 @@
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:Teammato.Controls"
              x:Class="Teammato.Pages.ProfilePage"
              xmlns:viewModels="clr-namespace:Teammato.ViewModels">
-    <ContentPage.BindingContext>
-        <viewModels:ProfileViewModel />
-    </ContentPage.BindingContext>
+    
+    <Shell.TitleView>
+        <Grid>
+            <Label Text="Profile"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   Style="{DynamicResource Title}"
+                   FontAttributes="Bold" 
+                   SemanticProperties.Description="Profile"/>
+        </Grid>
+    </Shell.TitleView>
+    
+  
+    
+    
     <ContentPage.Content>
-        <StackLayout>
-            <Button Text="Log out" Command="{Binding LogOutCommand}"/>
-        </StackLayout>
+        <ScrollView>
+            <VerticalStackLayout Padding="16,0" 
+                                 Spacing="5">
+                <!-- Profile image -->
+                <Frame BackgroundColor="Transparent"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center"
+                       HeightRequest="300"
+                       WidthRequest="300"
+                       Margin="20"
+                       BorderColor="Gray"
+                       CornerRadius="150"
+                       Padding="0">
+                    <ImageButton x:Name="ProfileImage"
+                                 Aspect="AspectFill"
+                                 Command="{Binding PickProfileImageCommand}"
+                                 Source="{Binding ProfileImageUrl}"
+                                 SemanticProperties.Description="Profile image"/>
+                </Frame>
+                <!-- Profile name and description -->
+                <Label Text="Nickname"
+                       FontAttributes="Bold"
+                       SemanticProperties.Description="Nickname"/>
+                <!-- <controls:CustomEntry Text="{Binding Nickname, Mode=TwoWay}"   -->
+                <!--                       Margin="4"/> -->
+                <controls:CustomEntry Text="{Binding Nickname, Mode=TwoWay}"
+                       Margin="4"/>
+                
+                <Label Text="Description"
+                       FontAttributes="Bold"
+                       SemanticProperties.Description="Description"/>
+                <controls:CustomEditor Text="{Binding Description, Mode=TwoWay}"
+                        AutoSize="TextChanges"
+                        Margin="4"/>
+                <!-- <controls:CustomEditor Text="{Binding Description, Mode=TwoWay}" -->
+                <!--                        AutoSize="TextChanges" -->
+                <!--                        Margin="4"/> -->
+                
+                <!-- Apply changes button -->
+                <Button Text="Apply Changes" 
+                        Command="{Binding ApplyChangesCommand}"
+                        IsEnabled="{Binding IsModified}"
+                        SemanticProperties.Description="Apply button"/>
+                <!-- Preferred languages -->
+                <Grid ColumnDefinitions="*,Auto">
+                    <Label Text="Languages"
+                           FontAttributes="Bold"
+                           FontSize="16"
+                           VerticalOptions="Center"
+                           SemanticProperties.Description="Preferred languages"/>
+                    <Button Text="+" 
+                            Command="{Binding AddLanguageCommand}"
+                            HeightRequest="10"
+                            WidthRequest="10"
+                            Grid.Column="1"
+                            HorizontalOptions="End"
+                            CornerRadius="30"
+                            SemanticProperties.Description="Add language"/>
+                </Grid>
+                <CollectionView ItemsSource="{Binding  PreferredLanguages}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ColumnDefinitions="*, Auto">
+                                <Label Text="{Binding Name}" VerticalOptions="Center"/>
+                                <Button Text="Remove"
+                                        SemanticProperties.Description="Remove language"
+                                        Style="{DynamicResource LinkButton}"
+                                        Command="{Binding BindingContext.RemoveLanguageCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                        CommandParameter="{Binding ISOName}"
+                                        Grid.Column="1"
+                                        BackgroundColor="Transparent"
+                                        />
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <!-- Favorite games -->
+                <Grid ColumnDefinitions="*,Auto">
+                    <Label Text="Favorite games"
+                           SemanticProperties.Description="Favorite games"
+                           FontAttributes="Bold"
+                           FontSize="16"
+                           VerticalOptions="Center"/>
+                    <Button Text="+" 
+                            SemanticProperties.Description="Add game"
+                            Command="{Binding AddFavoriteGameCommand}"
+                            HeightRequest="10"
+                            WidthRequest="10"
+                            Grid.Column="1"
+                            HorizontalOptions="End"
+                            CornerRadius="30"/>
+                </Grid>
+                <CollectionView ItemsSource="{Binding  FavoriteGames}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ColumnDefinitions="*, Auto">
+                                <Label Text="{Binding Name}" VerticalOptions="Center"/>
+                            <Button Text="Remove"
+                                    SemanticProperties.Description="Remove game"
+                                    Style="{DynamicResource LinkButton}"
+                                    Command="{Binding BindingContext.RemoveFavoriteGameCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                    CommandParameter="{Binding GameID}"
+                                    Grid.Column="1"
+                                    
+                                    />
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                
+                <!-- Logout buttont -->
+                <Button Text="Logout" 
+                        SemanticProperties.Description="Logout button"
+                        Command="{Binding LogOutCommand}"/>
+            </VerticalStackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

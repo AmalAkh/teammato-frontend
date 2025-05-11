@@ -2,8 +2,132 @@
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Teammato.Pages.ChatsPage">
-    <ContentPage.Content>
+             x:Class="Teammato.Pages.ChatsPage"
+             xmlns:utils="clr-namespace:Teammato.Utils"
+             xmlns:viewModels="clr-namespace:Teammato.ViewModels"
+             xmlns:controls="clr-namespace:Teammato.Controls">
+    <Shell.TitleView>
+        <Grid>
+            <Label Text="Chats"
+                   SemanticProperties.Description="Chats"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   Style="{DynamicResource Title}"
+                   FontAttributes="Bold" />
+        </Grid>
+    </Shell.TitleView>
+    <ContentPage.BindingContext>
+        <viewModels:ChatsViewModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <utils:IGDBUrlImageConverter x:Key="ChatUrlImageConverter" />
+            
+            <utils:UrlImageConverter x:Key="ImageUrlConverter" />
+            <utils:NullToBooleanConverter x:Key="NullToBooleanConverter"/>
+        </ResourceDictionary>
         
+    </ContentPage.Resources>
+    
+        <ContentPage.Content>
+            <Grid ColumnDefinitions="*,4*">
+                <CollectionView x:Name="ChatsView" Grid.Column="0" ItemsSource="{Binding Chats}" SelectedItem="{Binding SelectedChat, Mode=TwoWay}" SelectionChangedCommand="{Binding SelectChatCommand}" SelectionMode="Single">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Padding="4,5,5,5">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding SelectChatCommand}"/>
+                                </Grid.GestureRecognizers>
+                                    <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Frame Margin="20,0,0,0" CornerRadius="5" IsClippedToBounds="True" WidthRequest="30"  Grid.Column="0" HeightRequest="50">
+                                    <Image Aspect="AspectFill" WidthRequest="60" Source="{Binding Image}"  Grid.Column="0" HeightRequest="50" BackgroundColor="Gray"
+                                           SemanticProperties.Description="Chat image"/>
+                                </Frame>
+                                <StackLayout Grid.Column="1">
+                                    <Label  MaxLines="1" FontAttributes="Bold" Margin="10,0,0,6"   Text="{Binding Name}"/>
+                                    <Border IsVisible="{Binding LastMessage, Converter={StaticResource NullToBooleanConverter}}" Padding="2" Margin="10,0,0,0" Style="{DynamicResource LastMessageFrame}">
+                                        <Label MaxLines="1"  Margin="10,0,0,0">
+                                            <Label.Text>
+                                                <MultiBinding StringFormat="{}{1}: {0}">
+                                                    <Binding Path="LastMessage.Content" />
+                                                    <Binding Path="LastMessage.Sender.NickName" />
+                                                </MultiBinding>
+                                            </Label.Text>
+                                        </Label>
+                                    </Border>
+                                </StackLayout>
+                            </Grid>
+                                    
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <Grid x:Name="MessangerContainer" Grid.Column="1" RowDefinitions="Auto,*,Auto">
+                    
+                    <Grid Padding="4" Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding SelectedChat.OpenChatInfoCommand}"/>
+                        </Grid.GestureRecognizers>
+                       
+                        <Frame Margin="0,0,0,0" CornerRadius="50" IsClippedToBounds="True" WidthRequest="50"  Grid.Column="0" HeightRequest="50">
+                            <Image WidthRequest="50"  Grid.Column="0" HeightRequest="50" BackgroundColor="Gray" Source="{Binding SelectedChat.Image}"
+                                   SemanticProperties.Description="Chat image"/>
+                        </Frame>
+                        <Label FontAttributes="Bold" Margin="10,0,0,0" Text="{Binding SelectedChat.Name}" VerticalTextAlignment="Center" Grid.Column="1"/>
+                    </Grid>
+                    <CollectionView  x:Name="MessageCollectionView" ItemsUpdatingScrollMode="KeepLastItemInView" ItemsSource="{Binding SelectedChat.Messages}" Grid.Row="1" >
+                        <CollectionView.Header>
+                            <StackLayout x:Name="TopMessangerSpace"></StackLayout>
+                        </CollectionView.Header>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                            
+                                
+                                <StackLayout>
+                                    <Grid Padding="6">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackLayout Grid.Column="1" Padding="2">
+                                            <Label Margin="2" FontAttributes="Bold" Text="{Binding Sender.NickName}"/>
+                                            <Label Text="{Binding Content}" FontSize="16"/>
+                                            <Label Text="{Binding CreatedAt}" FontSize="8" Margin="0,4,0,0" />
+                                        
+                                        </StackLayout>
+                                    
+                                        <Frame Grid.Column="0"  Padding="0" CornerRadius="60" IsClippedToBounds="True" HeightRequest="40" WidthRequest="40">
+                                            <Image Aspect="AspectFill" Grid.Column="0" HeightRequest="40" WidthRequest="40" Source="{Binding Sender.Image, Converter={StaticResource ImageUrlConverter}, TargetNullValue='user.png'}"
+                                                   SemanticProperties.Description="Sender image"/>
+                                        </Frame>
+                                    
+                                    </Grid>
+                                </StackLayout>
+                            
+                                
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                    <Grid Grid.Row="2" Padding="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <controls:CustomEntry Grid.Column="0" Placeholder="Message..."  Text="{Binding SelectedChat.MessageText}" />
+                        <ImageButton Grid.Column="1" Padding="10"  Command="{Binding SelectedChat.AddMessageCommand}" SemanticProperties.Description="Send button">
+                            <ImageButton.Source>
+                                <FontImageSource Color="Black" Size="12" FontFamily="FontAwesomeSolid" Glyph="&#xf1d8;"/>
+                            </ImageButton.Source>
+                        </ImageButton>
+                    </Grid>
+                </Grid>
+            </Grid>
     </ContentPage.Content>
 </ContentPage>

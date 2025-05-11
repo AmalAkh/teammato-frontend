@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net9.0-android;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>
-        <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>
+        <TargetFrameworks>net9.0-android;</TargetFrameworks>
+        <!-- <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks> -->
         <!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
         <!-- <TargetFrameworks>$(TargetFrameworks);net9.0-tizen</TargetFrameworks> -->
 
@@ -60,8 +60,32 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="akavache" Version="10.0.1" />
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+        <PackageReference Include="FirebaseDatabase.net" Version="5.0.0" />
         <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)"/>
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0"/>
+        <PackageReference Include="OneSignalSDK.DotNet" Version="5.2.1" />
+        <PackageReference Include="Xamarin.Firebase.Core" Version="121.1.1.14" />
+        <PackageReference Include="Xamarin.Firebase.Crashlytics" Version="119.4.2.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Platforms\Android\google-services.json" />
+      <GlobalAnalyzerConfigFiles Include="Platforms\Android\google-services.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <MauiXaml Update="Pages\ChatInfoPage.xaml">
+        <SubType>Designer</SubType>
+      </MauiXaml>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Pages\ChatInfoPage.xaml.cs">
+        <DependentUpon>ChatInfoPage.xaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
     </ItemGroup>
 
 </Project>
