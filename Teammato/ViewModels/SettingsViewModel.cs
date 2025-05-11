@@ -3,6 +3,7 @@ using Microsoft.Maui.Storage;
 
 namespace Teammato.ViewModels;
 using Teammato.Abstractions;
+using OneSignalSDK.DotNet;
 
 public class SettingsViewModel : BaseViewModel
 {
@@ -12,12 +13,21 @@ public class SettingsViewModel : BaseViewModel
     
     public bool Notifications
     {
-        get => _userSettings.Notifications;
+        get => OneSignalSDK.DotNet.OneSignal.User.PushSubscription.OptedIn;
         set
         {
             if (_userSettings.Notifications != value)
             {
                 _userSettings.Notifications = value;
+                if (!value)
+                {
+                    OneSignalSDK.DotNet.OneSignal.User.PushSubscription.OptOut();
+                }
+                else
+                {
+                    OneSignalSDK.DotNet.OneSignal.User.PushSubscription.OptIn();
+                    
+                }
                 OnPropertyChanged();
                 SaveSettingsAsync();
             }
