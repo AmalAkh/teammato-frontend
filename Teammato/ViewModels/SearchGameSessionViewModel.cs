@@ -133,6 +133,13 @@ public class SearchGameSessionViewModel : BaseViewModel
     
     private async void StartGameSearch()
     {
+        if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+        {
+            
+            await App.Current.MainPage.DisplayAlert("No connection", "Your device is not connected to the internet ", "OK");
+            
+            return;
+        }
         List<string> gameIds = new List<string>();
         foreach (var game in Games)
         {

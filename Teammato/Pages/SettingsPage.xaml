@@ -33,7 +33,7 @@
                         <Switch x:Name="NotificationSwitch"
                                 HorizontalOptions="EndAndExpand"
                                 IsToggled="{Binding Notifications, Mode=TwoWay}"/>
-                    </Grid>
+                </Grid>
                 <!-- Dark theme switch -->
                     <Grid ColumnDefinitions="*,Auto">
                         <Label Text="Use dark theme"
@@ -41,7 +41,7 @@
                               
                                FontAttributes="Bold"/>
                         <Switch x:Name="ThemeSwitch"
-                                IsEnabled="{Binding UseSystemTheme, Converter={StaticResource BooleanToInverseConverter}}"
+                               
                                 HorizontalOptions="EndAndExpand"
                                 IsToggled="{Binding DarkTheme, Mode=TwoWay}"/>
                     </Grid>
@@ -55,16 +55,7 @@
                                 HorizontalOptions="EndAndExpand"
                                 IsToggled="{Binding UseBigFonts, Mode=TwoWay}"/>
                     </Grid>
-                <!-- Geoposition switch -->
-                    <Grid ColumnDefinitions="*,Auto">
-                        <Label Text="Use my geolocation"
-                               VerticalOptions="Center"
-                              
-                               FontAttributes="Bold"/>
-                        <Switch x:Name="GeopositionSwitch"
-                                HorizontalOptions="EndAndExpand"
-                                IsToggled="{Binding Geoposition, Mode=TwoWay}"/>
-                    </Grid>
+                
                 
                    
             </VerticalStackLayout>

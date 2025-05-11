@@ -36,6 +36,13 @@ public class GameSearchViewModel : BaseViewModel
     
     private async void SearchGamesAsync(string name)
     {
+        if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+        {
+            
+            await App.Current.MainPage.DisplayAlert("No connection", "Your device is not connected to the internet ", "OK");
+            
+            return;
+        }
         if (string.IsNullOrWhiteSpace(name))
             return;
 

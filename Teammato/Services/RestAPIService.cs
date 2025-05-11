@@ -457,20 +457,31 @@ public class RestAPIService
         
         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "api/languages/list");
         request.Headers.Add("Authorization", "Bearer " + _accessToken);
-        
-        var response = await _client.SendAsync(request);
-        if (response.IsSuccessStatusCode)
+        try
         {
-            var content = await response.Content.ReadAsStreamAsync();
-            var options = new JsonSerializerOptions
+            var response = await _client.SendAsync(request);
+            if (response.IsSuccessStatusCode)
             {
-                PropertyNameCaseInsensitive = true
-            };
-            var languages = JsonSerializer.Deserialize<List<Language>>(content, options);
-            await BlobCache.UserAccount.InsertObject<List<Language>>("preferred_languages", languages);
-            return languages;
+                var content = await response.Content.ReadAsStreamAsync();
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+                var languages = JsonSerializer.Deserialize<List<Language>>(content, options);
+                await BlobCache.UserAccount.InsertObject<List<Language>>("preferred_languages", languages);
+                return languages;
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                await UpdateAccessToken();
+                return await GetLanguages();
+            }
         }
-        
+        catch (HttpRequestException e)
+        {
+            return await StorageService.GetLanguagesAsync();
+        }
+
         return null;
     }
     
@@ -503,6 +514,9 @@ public class RestAPIService
 
         if (Connectivity.NetworkAccess != NetworkAccess.Internet)
         {
+            
+            await App.Current.MainPage.DisplayAlert("No connection", "Your device is not connected to the internet ", "OK");
+            
             return;
         }
         
@@ -570,6 +584,9 @@ public class RestAPIService
             var games = JsonSerializer.Deserialize<List<Game>>(content, options);
             await BlobCache.UserAccount.InsertObject<List<Game>>("favorite_games", games);
             return games;
+        }else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            
         }
         
         return null;

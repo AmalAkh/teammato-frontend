@@ -14,6 +14,7 @@ public partial class LoginPage : ContentPage
     {
         
         InitializeComponent();
+        
         if (DeviceInfo.Idiom == DeviceIdiom.Tablet)
         {
             if (DeviceDisplay.MainDisplayInfo.Orientation == DisplayOrientation.Portrait)
@@ -54,6 +55,10 @@ public partial class LoginPage : ContentPage
         {
             App.Current.MainPage = new AppShell();
             
+        }
+        else
+        {
+            loginContainer.IsVisible = true;
         }
         
     }

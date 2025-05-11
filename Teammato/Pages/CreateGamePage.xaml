@@ -41,6 +41,10 @@
                     <Label Text="Duration" FontAttributes="Bold" VerticalTextAlignment="Center"/>
                     <controls:CustomEntry Grid.Column="1" ReturnType="Done" Text="{Binding Duration, Mode=TwoWay}"  Keyboard="Numeric"  />
                 </Grid>
+                <Grid ColumnDefinitions="100*, *">
+                    <Label Text="Find the nearest to you" VerticalTextAlignment="Center" FontAttributes="Bold"/>
+                    <Switch IsToggled="{Binding Nearest, Mode=TwoWay}"/>
+                </Grid>
                 <controls:CustomEditor Placeholder="Description" Margin="0,10,0,0" HeightRequest="150" />
                 <Button Command="{Binding CreateGameCommand}" Text="Create game" Margin="0,10,0,0"/>
             </StackLayout>

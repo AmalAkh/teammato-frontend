@@ -23,7 +23,7 @@
             <utils:IGDBUrlImageConverter x:Key="ChatUrlImageConverter" />
             
             <utils:UrlImageConverter x:Key="ImageUrlConverter" />
-            
+            <utils:NullToBooleanConverter x:Key="NullToBooleanConverter"/>
         </ResourceDictionary>
         
     </ContentPage.Resources>
@@ -46,7 +46,7 @@
                                 </Frame>
                                 <StackLayout Grid.Column="1">
                                     <Label  MaxLines="1" FontAttributes="Bold" Margin="10,0,0,6"   Text="{Binding Name}"/>
-                                    <Border Padding="2" Margin="10,0,0,0" Style="{DynamicResource LastMessageFrame}">
+                                    <Border IsVisible="{Binding LastMessage, Converter={StaticResource NullToBooleanConverter}}" Padding="2" Margin="10,0,0,0" Style="{DynamicResource LastMessageFrame}">
                                         <Label MaxLines="1"  Margin="10,0,0,0">
                                             <Label.Text>
                                                 <MultiBinding StringFormat="{}{1}: {0}">

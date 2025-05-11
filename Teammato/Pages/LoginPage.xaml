@@ -13,7 +13,7 @@
         
         <Grid>
           
-            <StackLayout VerticalOptions="Center" Padding="20">
+            <StackLayout x:Name="loginContainer" IsVisible="False" VerticalOptions="Center" Padding="20">
                 
                 <controls:CustomEntry Placeholder="E-mail or nickname" 
                                       Text="{Binding Login, Mode=OneWayToSource}"  

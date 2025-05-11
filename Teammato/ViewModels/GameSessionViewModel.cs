@@ -193,10 +193,18 @@ public class GameSessionViewModel : BaseViewModel
 
     public async void StartGame()
     {
+        if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+        {
+            
+            await App.Current.MainPage.DisplayAlert("No connection", "Your device is not connected to the internet ", "OK");
+            
+            return;
+        }
         var chatId = await RestAPIService.StartGame(GameSession.Id);
         await Shell.Current.Navigation.PopAsync();
         await Shell.Current.Navigation.PopAsync();
         ChatPageBus.NewChatId = chatId;
+        WebSocketService.RemoveHandler("GameSessionWaitingRoom");
         await Shell.Current.GoToAsync("//chats");
     }
     

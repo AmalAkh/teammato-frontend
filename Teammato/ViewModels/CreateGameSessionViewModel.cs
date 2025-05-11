@@ -132,6 +132,24 @@ public class CreateGameSessionViewModel : BaseViewModel
 
     public async void CreateGame()
     {
+        if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+        {
+            
+            await App.Current.MainPage.DisplayAlert("No connection", "Your device is not connected to the internet ", "OK");
+            
+            return;
+        }
+        if (TargetGame == null)
+        {
+            await Shell.Current.DisplayAlert("Error", "Please select the game you want to play", "ok");
+            return;
+        }
+
+        if (Duration <= 0)
+        {
+            await Shell.Current.DisplayAlert("Error", "Enter valid duration", "ok");
+            return;
+        }
         var gameSessionConfig = new GameSessionConfig()
         {
             GameId = TargetGame.Game.GameID,
@@ -141,6 +159,7 @@ public class CreateGameSessionViewModel : BaseViewModel
             
         };
         
+        
         foreach (var language in Languages)
         {
             if (language.IsSelected)
@@ -148,7 +167,41 @@ public class CreateGameSessionViewModel : BaseViewModel
                 gameSessionConfig.Languages.Add(language.ISOName);
             }
         }
+        
+        if (Languages.Count == 0)
+        {
+            await Shell.Current.DisplayAlert("Error", "Please select at least one language", "ok");
+            return;
+        }
+        var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
 
+        if (status != PermissionStatus.Granted)
+        {
+            status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+        }
+
+        
+
+        if (Nearest && status == PermissionStatus.Granted)
+        {
+            
+            var location = await Geolocation.GetLocationAsync();
+
+            if (location != null)
+            {
+                Console.WriteLine($"Latitude: {location.Latitude}");
+                Console.WriteLine($"Longitude: {location.Longitude}");
+                gameSessionConfig.Latitude = location.Latitude;
+                gameSessionConfig.Longitude = location.Longitude;
+            }
+            else
+            {
+                Console.WriteLine("Location is null.");
+            }
+            
+        }
+        
+            
         
         if (WebSocketService.State == WebSocketState.Open)
         {
