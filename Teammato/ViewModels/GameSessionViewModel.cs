@@ -186,6 +186,10 @@ public class GameSessionViewModel : BaseViewModel
         {
             await RestAPIService.CancelGame(GameSession.Id);
         }
+        else
+        {
+            await RestAPIService.LeaveSession(GameSession.Id);
+        }
         WebSocketService.RemoveHandler("GameSessionWaitingRoom");
         await Shell.Current.Navigation.PopAsync();
         

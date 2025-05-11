@@ -57,6 +57,30 @@ public class RestAPIService
         return false;
 
     }
+    public static async Task<bool> LeaveSession( string chatId)
+    {
+        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"api/gamesessions/{chatId}/leave");
+        request.Headers.Add("Authorization", "Bearer " + _accessToken);
+        
+        
+
+       
+        
+        var response = await _client.SendAsync(request);
+        if (response.IsSuccessStatusCode)
+        {
+            return true;
+            
+        }
+        else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized);
+        {
+            await UpdateAccessToken();
+            await LeaveSession(chatId);
+            return false;
+        }
+        return false;
+
+    }
     
     public static async Task<bool> SignUp(string email, string nickname, string password)
     {
