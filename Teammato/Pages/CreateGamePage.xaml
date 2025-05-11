@@ -30,8 +30,7 @@
                                 <CheckBox Grid.Column="0" IsChecked="{Binding IsSelected, Mode=TwoWay }" SemanticProperties.Description="Language checkbox">
                                         
                                 </CheckBox>
-                                <Label FontAttributes="Bold" FontSize="16" Grid.Column="1" VerticalTextAlignment="Center" Text="{Binding Name}" VerticalOptions="Center"
-                                       SemanticProperties.Description="{Binding Name}"/>
+                                <Label FontAttributes="Bold" FontSize="16" Grid.Column="1" VerticalTextAlignment="Center" Text="{Binding Name}" VerticalOptions="Center"/>
                             </Grid>     
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
@@ -40,20 +39,17 @@
                 <Grid Margin="0,10,0,0" ColumnDefinitions="4*, *">
                     <Label Text="Teammates" FontAttributes="Bold" VerticalTextAlignment="Center"
                            SemanticProperties.Description="Teammates"/>
-                    <controls:CustomEntry Grid.Column="1" ReturnType="Done" Text="{Binding TeammatesCount, Mode=TwoWay}"  Keyboard="Numeric"  
-                                          SemanticProperties.Description="{Binding TeammatesCount}"/>
+                    <controls:CustomEntry Grid.Column="1" ReturnType="Done" Text="{Binding TeammatesCount, Mode=TwoWay}"  Keyboard="Numeric"  />
                 </Grid>
                 <Grid Margin="0,10,0,0" ColumnDefinitions="4*, *">
                     <Label Text="Duration" FontAttributes="Bold" VerticalTextAlignment="Center"
                            SemanticProperties.Description="Duration"/>
-                    <controls:CustomEntry Grid.Column="1" ReturnType="Done" Text="{Binding Duration, Mode=TwoWay}"  Keyboard="Numeric"  
-                                          SemanticProperties.Description="{Binding Duration}"/>
+                    <controls:CustomEntry Grid.Column="1" ReturnType="Done" Text="{Binding Duration, Mode=TwoWay}"  Keyboard="Numeric"  />
                 </Grid>
                 <Grid ColumnDefinitions="100*, *">
                     <Label Text="Find the nearest to you" VerticalTextAlignment="Center" FontAttributes="Bold"
                            SemanticProperties.Description="Find the nearest to you"/>
-                    <Switch IsToggled="{Binding Nearest, Mode=TwoWay}"
-                            SemanticProperties.Description="{Binding Nearest}"/>
+                    <Switch IsToggled="{Binding Nearest, Mode=TwoWay}"/>
                 </Grid>
                 <controls:CustomEditor Placeholder="Description" Margin="0,10,0,0" HeightRequest="150" 
                                        SemanticProperties.Description="Description"/>

@@ -47,8 +47,7 @@
                                            SemanticProperties.Description="Chat image"/>
                                 </Frame>
                                 <StackLayout Grid.Column="1">
-                                    <Label  MaxLines="1" FontAttributes="Bold" Margin="10,0,0,6"   Text="{Binding Name}"
-                                            SemanticProperties.Description="{Binding Name}"/>
+                                    <Label  MaxLines="1" FontAttributes="Bold" Margin="10,0,0,6"   Text="{Binding Name}"/>
                                     <Border IsVisible="{Binding LastMessage, Converter={StaticResource NullToBooleanConverter}}" Padding="2" Margin="10,0,0,0" Style="{DynamicResource LastMessageFrame}">
                                         <Label MaxLines="1"  Margin="10,0,0,0">
                                             <Label.Text>
@@ -76,8 +75,7 @@
                             <Image WidthRequest="50"  Grid.Column="0" HeightRequest="50" BackgroundColor="Gray" Source="{Binding SelectedChat.Image}"
                                    SemanticProperties.Description="Chat image"/>
                         </Frame>
-                        <Label FontAttributes="Bold" Margin="10,0,0,0" Text="{Binding SelectedChat.Name}" VerticalTextAlignment="Center" Grid.Column="1"
-                               SemanticProperties.Description="{Binding SelectedChat.Name}"/>
+                        <Label FontAttributes="Bold" Margin="10,0,0,0" Text="{Binding SelectedChat.Name}" VerticalTextAlignment="Center" Grid.Column="1"/>
                     </Grid>
                     <CollectionView  x:Name="MessageCollectionView" ItemsUpdatingScrollMode="KeepLastItemInView" ItemsSource="{Binding SelectedChat.Messages}" Grid.Row="1" >
                         <CollectionView.ItemTemplate>
@@ -91,9 +89,9 @@
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
                                         <StackLayout Grid.Column="1" Padding="2">
-                                            <Label Margin="2" FontAttributes="Bold" Text="{Binding Sender.NickName}" SemanticProperties.Description="{Binding Sender.NickName}"/>
-                                            <Label Text="{Binding Content}" FontSize="16" SemanticProperties.Description="{Binding Content}"/>
-                                            <Label Text="{Binding CreatedAt}" FontSize="8" Margin="0,4,0,0" SemanticProperties.Description="{Binding CreatedAt}"/>
+                                            <Label Margin="2" FontAttributes="Bold" Text="{Binding Sender.NickName}"/>
+                                            <Label Text="{Binding Content}" FontSize="16"/>
+                                            <Label Text="{Binding CreatedAt}" FontSize="8" Margin="0,4,0,0" />
                                         
                                         </StackLayout>
                                     
@@ -114,8 +112,7 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <controls:CustomEntry Grid.Column="0" Placeholder="Message..."  Text="{Binding SelectedChat.MessageText}" 
-                                              SemanticProperties.Description="{Binding GameName}"/>
+                        <controls:CustomEntry Grid.Column="0" Placeholder="Message..."  Text="{Binding SelectedChat.MessageText}" />
                         <ImageButton Grid.Column="1" Padding="10"  Command="{Binding SelectedChat.AddMessageCommand}" SemanticProperties.Description="Send button">
                             <ImageButton.Source>
                                 <FontImageSource Color="Black" Size="12" FontFamily="FontAwesomeSolid" Glyph="&#xf1d8;"/>

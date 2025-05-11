@@ -15,8 +15,7 @@
     <ContentPage.Content>
         <Grid Padding="6" RowDefinitions="Auto,*,Auto">
             
-            <Label Margin="6" Grid.Column="0" Text="{Binding GameName}" FontAttributes="Bold" FontSize="18"
-                   SemanticProperties.Description="{Binding GameName}"/>
+            <Label Margin="6" Grid.Column="0" Text="{Binding GameName}" FontAttributes="Bold" FontSize="18"/>
             <CollectionView Margin="6" Grid.Row="1" ItemsSource="{Binding Participants}" SelectedItem="{Binding SelectedChat, Mode=TwoWay}" SelectionChangedCommand="{Binding SelectChatCommand}" SelectionMode="Single">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
@@ -33,8 +32,7 @@
                                        SemanticProperties.Description="Game image"/>
                             </Frame>
                             
-                            <Label  Grid.Column="1" VerticalTextAlignment="Center"  MaxLines="1" FontAttributes="Bold" Margin="10,0,0,6"   Text="{Binding NickName}"
-                                    SemanticProperties.Description="{Binding NickName}"/>
+                            <Label  Grid.Column="1" VerticalTextAlignment="Center"  MaxLines="1" FontAttributes="Bold" Margin="10,0,0,6"   Text="{Binding NickName}"/>
                                 
                             
                         </Grid>
@@ -42,8 +40,7 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-            <Button Text="Start" IsVisible="{Binding IsOwned}" Command="{Binding StartGameCommand}" Grid.Row="2" 
-                    SemanticProperties.Description="{Binding Start}"/>
+            <Button Text="Start" IsVisible="{Binding IsOwned}" Command="{Binding StartGameCommand}" Grid.Row="2" />
             
         </Grid>
     </ContentPage.Content>

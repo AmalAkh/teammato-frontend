@@ -23,7 +23,7 @@
             <Frame Margin="0,0,0,0" CornerRadius="50" IsClippedToBounds="True" WidthRequest="50"  Grid.Column="0" HeightRequest="50">
                 <Image WidthRequest="50"  Grid.Column="0" HeightRequest="50" BackgroundColor="Gray" Source="{Binding Image}" SemanticProperties.Description="Chat image"/>
             </Frame>
-            <Label FontAttributes="Bold" Margin="10,0,0,0" Text="{Binding Name}" VerticalTextAlignment="Center" Grid.Column="1" SemanticProperties.Description="{Binding Name}"/>
+            <Label FontAttributes="Bold" Margin="10,0,0,0" Text="{Binding Name}" VerticalTextAlignment="Center" Grid.Column="1"/>
         </Grid>
     </Shell.TitleView>
     <ContentPage.Resources>
@@ -50,9 +50,9 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <StackLayout Grid.Column="1" Padding="2">
-                                    <Label Margin="2" FontAttributes="Bold" Text="{Binding Sender.NickName}" SemanticProperties.Description="{Binding Sender.Nickname}"/>
-                                    <Label Text="{Binding Content}" FontSize="16" SemanticProperties.Description="{Binding Content}"/>
-                                    <Label Text="{Binding CreatedAt}" FontSize="8" Margin="0,4,0,0" SemanticProperties.Description="{Binding CreatedAt}"/>
+                                    <Label Margin="2" FontAttributes="Bold" Text="{Binding Sender.NickName}" />
+                                    <Label Text="{Binding Content}" FontSize="16" />
+                                    <Label Text="{Binding CreatedAt}" FontSize="8" Margin="0,4,0,0"/>
                                     
                                 </StackLayout>
                                 

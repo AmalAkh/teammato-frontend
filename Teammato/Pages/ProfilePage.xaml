@@ -47,16 +47,14 @@
                 <!-- <controls:CustomEntry Text="{Binding Nickname, Mode=TwoWay}"   -->
                 <!--                       Margin="4"/> -->
                 <controls:CustomEntry Text="{Binding Nickname, Mode=TwoWay}"
-                       Margin="4"
-                       SemanticProperties.Description="{Binding Nickname}"/>
+                       Margin="4"/>
                 
                 <Label Text="Description"
                        FontAttributes="Bold"
                        SemanticProperties.Description="Description"/>
                 <controls:CustomEditor Text="{Binding Description, Mode=TwoWay}"
                         AutoSize="TextChanges"
-                        Margin="4"
-                        SemanticProperties.Description="{Binding Description}"/>
+                        Margin="4"/>
                 <!-- <controls:CustomEditor Text="{Binding Description, Mode=TwoWay}" -->
                 <!--                        AutoSize="TextChanges" -->
                 <!--                        Margin="4"/> -->
@@ -86,7 +84,7 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Grid ColumnDefinitions="*, Auto">
-                                <Label Text="{Binding Name}" VerticalOptions="Center" SemanticProperties.Description="{Binding Name}"/>
+                                <Label Text="{Binding Name}" VerticalOptions="Center"/>
                                 <Button Text="Remove"
                                         SemanticProperties.Description="Remove language"
                                         Style="{DynamicResource LinkButton}"
@@ -119,8 +117,7 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Grid ColumnDefinitions="*, Auto">
-                                <Label Text="{Binding Name}" VerticalOptions="Center"
-                                       SemanticProperties.Description="{Binding Name}"/>
+                                <Label Text="{Binding Name}" VerticalOptions="Center"/>
                             <Button Text="Remove"
                                     SemanticProperties.Description="Remove game"
                                     Style="{DynamicResource LinkButton}"

@@ -32,8 +32,7 @@
                                     <Image Aspect="AspectFill" WidthRequest="40" Source="{Binding Image, Converter={StaticResource ImageUrlConverter}}"  Grid.Column="0" HeightRequest="40" BackgroundColor="Gray"
                                            SemanticProperties.Description="Profile image"/>
                                 </Frame>
-                                <Label Margin="10,0,0,0" VerticalTextAlignment="Center" Grid.Column="1" Style="{DynamicResource Title}" Text="{Binding NickName}"
-                                       SemanticProperties.Description="{Binding NickName}"/>
+                                <Label Margin="10,0,0,0" VerticalTextAlignment="Center" Grid.Column="1" Style="{DynamicResource Title}" Text="{Binding NickName}"/>
                             </Grid>
                                     
                         </DataTemplate>
