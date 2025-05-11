@@ -154,6 +154,7 @@ public class GameSessionViewModel : BaseViewModel
             {
                 MainThread.BeginInvokeOnMainThread(async () =>
                 {
+                    WebSocketService.RemoveHandler("GameSessionWaitingRoom");
                     await Shell.Current.DisplayAlert("Game session cancelled", "Game session cancelled", "OK");
                     await Shell.Current.Navigation.PopAsync();
                     await Shell.Current.Navigation.PopAsync();
@@ -163,6 +164,7 @@ public class GameSessionViewModel : BaseViewModel
                 
                 MainThread.BeginInvokeOnMainThread(async () =>
                 {
+                    WebSocketService.RemoveHandler("GameSessionWaitingRoom");
                     Dictionary<string, string> data =
                         JsonSerializer.Deserialize<Dictionary<string, string>>(notification.Content);
                     await Shell.Current.Navigation.PopAsync();
