@@ -165,6 +165,7 @@ public class SearchGameSessionViewModel : BaseViewModel
             PlayersCount = TeammatesCount,
             Nearest = Nearest
         };
+        
         if (Nearest)
         {
             var location = await Geolocation.GetLocationAsync();
@@ -173,8 +174,17 @@ public class SearchGameSessionViewModel : BaseViewModel
             
 
         }
-        
 
+        if (gameIds.Count == 0)
+        {
+            await Shell.Current.DisplayAlert("Insufficient data", "Select at least one game", "OK");
+            return;
+        }
+        if (langs.Count == 0)
+        {
+            await Shell.Current.DisplayAlert("Insufficient data", "Select at least one language", "OK");
+            return;
+        }
         
         var gameSessions = await RestAPIService.GetGameSessions(config);
         if (gameSessions.Count > 0)

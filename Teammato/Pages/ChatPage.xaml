@@ -57,7 +57,7 @@
                                 </StackLayout>
                                 
                                 <Frame Grid.Column="0" Padding="0" CornerRadius="60" IsClippedToBounds="True" HeightRequest="40" WidthRequest="40">
-                                    <Image BackgroundColor="Red" Grid.Column="0" HeightRequest="40" WidthRequest="40" Source="{Binding Sender.Image, Converter={StaticResource ImageUrlConverter}}" SemanticProperties.Description="Sender's profile image"/>
+                                    <Image Aspect="AspectFill"  BackgroundColor="Gray" Grid.Column="0" HeightRequest="40" WidthRequest="40" Source="{Binding Sender.Image, Converter={StaticResource ImageUrlConverter}, FallbackValue='user.png', TargetNullValue='user.png'}" SemanticProperties.Description="Sender's profile image"/>
                                 </Frame>
                                 
                             </Grid>
@@ -78,7 +78,7 @@
                                           Focused="MessageTextEntry_OnFocused" SemanticProperties.Description="Type your message here"/>
                     <ImageButton Grid.Column="1" Padding="10"  Command="{Binding AddMessageCommand}" SemanticProperties.Description="Send message button">
                         <ImageButton.Source>
-                            <FontImageSource Color="Black" Size="12" FontFamily="FontAwesomeSolid" Glyph="&#xf1d8;"/>
+                            <FontImageSource Color="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" Size="12" FontFamily="FontAwesomeSolid" Glyph="&#xf1d8;"/>
                         </ImageButton.Source>
                     </ImageButton>
             </Grid>
