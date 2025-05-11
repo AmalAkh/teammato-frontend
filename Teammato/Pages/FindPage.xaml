@@ -27,12 +27,10 @@
                             <DataTemplate>
                                 <Grid ColumnDefinitions="*,9*" Padding="4,10,10,10">
                                     
-                                    <CheckBox Grid.Column="0" IsChecked="{Binding IsSelected, Mode=TwoWay }" 
-                                              SemanticProperties.Description="{Binding IsSelected}">
+                                    <CheckBox Grid.Column="0" IsChecked="{Binding IsSelected, Mode=TwoWay }">
                                         
                                     </CheckBox>
-                                    <Label FontAttributes="Bold" Grid.Column="1" VerticalTextAlignment="Center" Text="{Binding Name}" VerticalOptions="Center"
-                                           SemanticProperties.Description="{Binding Name}"/>
+                                    <Label FontAttributes="Bold" Grid.Column="1" VerticalTextAlignment="Center" Text="{Binding Name}" VerticalOptions="Center"/>
                                 </Grid>     
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
@@ -45,12 +43,10 @@
                             <DataTemplate>
                                 <Grid ColumnDefinitions="*,9*" Padding="4,10,10,10">
                                     
-                                    <CheckBox Grid.Column="0" IsChecked="{Binding IsSelected, Mode=TwoWay }" 
-                                              SemanticProperties.Description="{Binding IsSelected}">
+                                    <CheckBox Grid.Column="0" IsChecked="{Binding IsSelected, Mode=TwoWay }" >
                                         
                                     </CheckBox>
-                                    <Label FontAttributes="Bold" Grid.Column="1" VerticalTextAlignment="Center" Text="{Binding Name}" VerticalOptions="Center"
-                                           SemanticProperties.Description="{Binding Name}"/>
+                                    <Label FontAttributes="Bold" Grid.Column="1" VerticalTextAlignment="Center" Text="{Binding Name}" VerticalOptions="Center"/>
                                 </Grid>     
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
@@ -59,8 +55,7 @@
                     <Grid ColumnDefinitions="4*, *">
                         <Label Text="Teammates" FontAttributes="Bold" VerticalTextAlignment="Center"
                                SemanticProperties.Description="Teammates"/>
-                        <controls:CustomEntry Grid.Column="1" ReturnType="Done" Text="{Binding TeammatesCount, Mode=TwoWay}"  Keyboard="Numeric"  
-                                              SemanticProperties.Description="{Binding TeammatesCount}"/>
+                        <controls:CustomEntry Grid.Column="1" ReturnType="Done" Text="{Binding TeammatesCount, Mode=TwoWay}"  Keyboard="Numeric"  />
                     </Grid>
                     <Label Text="Duration" Style="{DynamicResource Title}"
                            SemanticProperties.Description="Duration"/>
@@ -69,20 +64,17 @@
                         <Label Text="From" Grid.Column="0" VerticalTextAlignment="Center"
                                SemanticProperties.Description="From"/>
                         
-                        <controls:CustomEntry MaximumHeightRequest="50" VerticalTextAlignment="Center" Text="{Binding DurationFrom, Mode=TwoWay}" Grid.Column="1" ReturnType="Done"  Keyboard="Numeric"  
-                                              SemanticProperties.Description="{Binding DurationFrom}"/>
+                        <controls:CustomEntry MaximumHeightRequest="50" VerticalTextAlignment="Center" Text="{Binding DurationFrom, Mode=TwoWay}" Grid.Column="1" ReturnType="Done"  Keyboard="Numeric"  />
                         <Label HorizontalTextAlignment="Center" Text="To" Grid.Column="2" VerticalTextAlignment="Center"
                                SemanticProperties.Description="To"/>
-                        <controls:CustomEntry MaximumHeightRequest="50" VerticalTextAlignment="Center" Text="{Binding DurationTo, Mode=TwoWay}" Grid.Column="3" ReturnType="Done"  Keyboard="Numeric"  
-                                              SemanticProperties.Description="{Binding DurationTo}"/>
+                        <controls:CustomEntry MaximumHeightRequest="50" VerticalTextAlignment="Center" Text="{Binding DurationTo, Mode=TwoWay}" Grid.Column="3" ReturnType="Done"  Keyboard="Numeric"  />
                         <Label HorizontalTextAlignment="Center" Text="(Hours)" Grid.Column="4" VerticalTextAlignment="Center"
                                SemanticProperties.Description="(Hours)"/>
                     </Grid>
                     <Grid ColumnDefinitions="100*, *">
                         <Label Text="Find the nearest to you" VerticalTextAlignment="Center" FontAttributes="Bold"
                                SemanticProperties.Description="Find the nearest to you"/>
-                        <Switch IsToggled="{Binding Nearest, Mode=TwoWay}"
-                                SemanticProperties.Description="{Binding Nearest}"/>
+                        <Switch IsToggled="{Binding Nearest, Mode=TwoWay}"/>
                     </Grid>
                 </StackLayout>
                 

@@ -13,23 +13,26 @@
                         <Image Aspect="AspectFill" Source="{Binding SelectedGameSession.Image}" HeightRequest="400"
                                SemanticProperties.Description="Game image"/>
                     </Frame>
-                    <Label FontAttributes="Bold" Text="{Binding SelectedGameSession.GameName}" Style="{DynamicResource Title}" Margin="0,10,0,0"
-                           SemanticProperties.Description="{Binding SelectedGameSession.GameName}"/>
+                    <Label FontAttributes="Bold" Text="{Binding SelectedGameSession.GameName}" Style="{DynamicResource Title}" Margin="0,10,0,0"/>
                     <Label FontAttributes="Bold">
                         <Label.Text>
                             <MultiBinding StringFormat="{}{0} out of {1}">
+
                                 <Binding Path="SelectedGameSession.Participants.Count"
                                          />
                                 <Binding Path="SelectedGameSession.RequiredPlayersCount"
                                          />
+
                                 
                             </MultiBinding>
                         </Label.Text>
                     </Label>
+
                     <Label Text="{Binding SelectedGameSession.Duration, StringFormat='{}~{0} hours'}" 
                            />
                     <Label Text="{Binding SelectedGameSession.Description}"
                            />
+
                     
                 </StackLayout>
                 <StackLayout Grid.Row="1">
